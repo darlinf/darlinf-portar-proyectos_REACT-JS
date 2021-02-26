@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Container, Button, Link } from "@material-ui/core";
-import styles from "./style";
+import styles from "./style/styleLogin";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { Formik, Field, Form, ErrorMessage } from "formik";
@@ -25,6 +25,14 @@ export default function Login(props) {
       return;
     }
     setOpen(false);
+  };
+
+  const handleRouteRole = (role) => {
+    if (role === "Admin") props.history.push({ pathname: "/homeAdmin" });
+
+    if (role === "Student") props.history.push({ pathname: "/homeStudent" });
+
+    if (role === "Teacher") props.history.push({ pathname: "/homeTeacher" });
   };
 
   return (
@@ -60,7 +68,9 @@ export default function Login(props) {
                   const { from } = props.location.state || {
                     from: { pathname: "/" },
                   };
-                  props.history.push(from);
+                  handleRouteRole(user.role);
+                  console.log(user.role);
+                  // props.history.push(from);
                 },
                 (error) => {
                   setSubmitting(false);

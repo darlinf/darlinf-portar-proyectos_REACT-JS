@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -8,6 +8,8 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { Link } from "react-router-dom";
+
+import { authenticationService } from "../_services/authentication.service";
 
 import MenuNav from "./MenuNav";
 
@@ -23,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Navbar() {
+export default function Navbar(props) {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -41,17 +43,28 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    authenticationService.currentUser.subscribe((x) => {
+      setUser({
+        currentUser: x,
+        //isAdmin: x && x.role === Role.Admin
+      });
+    });
+  }, []);
+
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar style={{ backgroundColor: "#1976D2" }} position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             <Link to="/" style={{ color: "#FFFFFF", textDecoration: "none" }}>
               Home
             </Link>
           </Typography>
-          <MenuNav></MenuNav>
-          {auth && (
+          {!user.currentUser && <MenuNav></MenuNav>}
+          {user.currentUser && (
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -78,7 +91,16 @@ export default function Navbar() {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleClose();
+                    authenticationService.logout();
+                    // props.history.push({ pathname: "/" });
+                    console.log(props);
+                  }}
+                >
+                  Cerrar seccion
+                </MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
             </div>
