@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Container, Button, Link } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 
 export default function ProposedProjectsStudent(props) {
   return (
@@ -38,6 +39,15 @@ export default function ProposedProjectsStudent(props) {
             defaultValue=""
             variant="filled"
           />
+          <Box style={{ display: "flex", flexDirection: "row-reverse" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ width: 50, marginTop: 10 }}
+            >
+              Crear
+            </Button>
+          </Box>
         </form>
       </Card>
     </Container>

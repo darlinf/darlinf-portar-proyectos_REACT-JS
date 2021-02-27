@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FinalProjectStudent(props) {
+export default function ProjectChapterStudent(props) {
   const classes = useStyles();
   return (
     <Container style={{ width: 500, marginTop: 50 }}>
@@ -31,42 +31,22 @@ export default function FinalProjectStudent(props) {
           <Typography
             style={{ textAlign: "center", fontSize: 30, marginBottom: 10 }}
           >
-            Crear proyecto final
+            Crear capitulo de proyecto
           </Typography>
 
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              border: "solid #E8E8E8 1px",
-              marginBottom: 8,
-              backgroundColor: "#E8E8E8",
-              borderRadius: 5,
-            }}
-          >
-            <Typography
-              style={{
-                lineHeight: 3,
-                marginLeft: 7,
-              }}
-            >
-              Imagen de portada
-            </Typography>
-            <div className={classes.root}>
-              <input
-                accept="image/*"
-                className={classes.input}
-                id="contained-button-file"
-                multiple
-                type="file"
-              />
-              <label htmlFor="contained-button-file">
-                <Button variant="contained" color="primary" component="span">
-                  Seleccionar imagen
-                </Button>
-              </label>
-            </div>
-          </Box>
+          <TextField
+            id="outlined-basic"
+            label="Numero de capitulo"
+            style={{ marginBottom: 10 }}
+            variant="filled"
+          />
+
+          <TextField
+            id="outlined-basic"
+            label="Nombre"
+            style={{ marginBottom: 10 }}
+            variant="filled"
+          />
 
           <Box
             style={{
@@ -96,15 +76,6 @@ export default function FinalProjectStudent(props) {
               </label>
             </div>
           </Box>
-
-          <TextField
-            style={{ marginBottom: 10 }}
-            label="Descripción"
-            multiline
-            rows={4}
-            defaultValue=""
-            variant="filled"
-          />
 
           <Box style={{ display: "flex", flexDirection: "row-reverse" }}>
             <Button

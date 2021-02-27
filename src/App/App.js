@@ -10,10 +10,14 @@ import ProposedProject from "../_pages/IncognitoPages/ProposedProject";
 import HomeAdmin from "../_pages/AdminPages/HomeAdmin";
 
 import HomeTeacher from "../_pages/TeacherPages/HomeTeacher";
+import ManagementProposedProjects from "../_pages/TeacherPages/ManagementProposedProjects";
 
 import HomeStudent from "../_pages/StudentPages/HomeStudent";
 import ProposedProjectsStudent from "../_pages/StudentPages/ProposedProjectsStudent";
 import FinalProjectStudent from "../_pages/StudentPages/FinalProjectStudent";
+import ProjectChapterStudent from "../_pages/StudentPages/ProjectChapterStudent";
+import ProposedProjectsShowStudent from "../_pages/StudentPages/ProposedProjectsShowStudent";
+import ProjectChapterShowStudent from "../_pages/StudentPages/ProjectChapterShowStudent";
 
 function App() {
   return (
@@ -31,6 +35,10 @@ function App() {
           <Route path="/homeAdmin" component={HomeAdmin} />
 
           <Route path="/homeTeacher" component={HomeTeacher} />
+          <Route
+            path="/managementProposedProjects"
+            component={ManagementProposedProjects}
+          ></Route>
 
           <Route path="/homeStudent" component={HomeStudent} />
           <Route
@@ -38,8 +46,20 @@ function App() {
             component={ProposedProjectsStudent}
           />
           <Route
+            path="/ProposedProjectsShowStudent"
+            component={ProposedProjectsShowStudent}
+          />
+          <Route
             path="/finalProjectStudent"
             component={FinalProjectStudent}
+          ></Route>
+          <Route
+            path="/projectChapterStudent"
+            component={ProjectChapterStudent}
+          ></Route>
+          <Route
+            path="/projectChapterShowStudent"
+            component={ProjectChapterShowStudent}
           ></Route>
         </Switch>
       </main>

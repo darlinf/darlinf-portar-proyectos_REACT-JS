@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FinalProjectStudent(props) {
+export default function ProjectChapterShowStudent(props) {
   const classes = useStyles();
   return (
     <Container style={{ width: 500, marginTop: 50 }}>
@@ -31,7 +31,7 @@ export default function FinalProjectStudent(props) {
           <Typography
             style={{ textAlign: "center", fontSize: 30, marginBottom: 10 }}
           >
-            Crear proyecto final
+            Capitulo de documentacion
           </Typography>
 
           <Box
@@ -50,70 +50,36 @@ export default function FinalProjectStudent(props) {
                 marginLeft: 7,
               }}
             >
-              Imagen de portada
+              Calificacion:{" "}
+              <Typography component="span" style={{ fontWeight: "bold" }}>
+                A
+              </Typography>
             </Typography>
-            <div className={classes.root}>
-              <input
-                accept="image/*"
-                className={classes.input}
-                id="contained-button-file"
-                multiple
-                type="file"
-              />
-              <label htmlFor="contained-button-file">
-                <Button variant="contained" color="primary" component="span">
-                  Seleccionar imagen
-                </Button>
-              </label>
-            </div>
-          </Box>
-
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: 10,
-              border: "solid #E8E8E8 1px",
-              backgroundColor: "#E8E8E8",
-              borderRadius: 5,
-            }}
-          >
-            <Typography style={{ marginLeft: 7, lineHeight: 3 }}>
-              Documentacion final
-            </Typography>
-            <div className={classes.root}>
-              <input
-                accept="image/*"
-                className={classes.input}
-                id="contained-button-file"
-                multiple
-                type="file"
-              />
-              <label htmlFor="contained-button-file">
-                <Button variant="contained" color="primary" component="span">
-                  Seleccionar PDF
-                </Button>
-              </label>
-            </div>
-          </Box>
-
-          <TextField
-            style={{ marginBottom: 10 }}
-            label="Descripción"
-            multiline
-            rows={4}
-            defaultValue=""
-            variant="filled"
-          />
-
-          <Box style={{ display: "flex", flexDirection: "row-reverse" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ width: 50, marginTop: 10 }}
+            <Typography
+              style={{
+                lineHeight: 3,
+                marginLeft: 7,
+              }}
             >
-              Crear
-            </Button>
+              Capitulo{" "}
+              <Typography component="span" style={{ fontWeight: "bold" }}>
+                1
+              </Typography>
+            </Typography>
+            <div className={classes.root}>
+              <input
+                accept="image/*"
+                className={classes.input}
+                id="contained-button-file"
+                multiple
+                type="file"
+              />
+              <label htmlFor="contained-button-file">
+                <Button variant="contained" color="primary" component="span">
+                  Ver Pdf
+                </Button>
+              </label>
+            </div>
           </Box>
         </form>
       </Card>
