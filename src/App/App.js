@@ -8,9 +8,14 @@ import FinalProyect from "../_pages/IncognitoPages/FinalProyect";
 import ProposedProject from "../_pages/IncognitoPages/ProposedProject";
 
 import HomeAdmin from "../_pages/AdminPages/HomeAdmin";
+import ManageTeacherAdmin from "../_pages/AdminPages/ManageTeacherAdmin";
+import RegisterTeacher from "../_pages/AdminPages/RegisterTeacher";
 
 import HomeTeacher from "../_pages/TeacherPages/HomeTeacher";
 import ManagementProposedProjects from "../_pages/TeacherPages/ManagementProposedProjects";
+import ManageFinalProjectsTeacher from "../_pages/TeacherPages/ManageFinalProjectsTeacher";
+import ManageStudentsTeacher from "../_pages/TeacherPages/ManageStudentsTeacher";
+import RateChaptersTeacher from "../_pages/TeacherPages/RateChaptersTeacher";
 
 import HomeStudent from "../_pages/StudentPages/HomeStudent";
 import ProposedProjectsStudent from "../_pages/StudentPages/ProposedProjectsStudent";
@@ -33,11 +38,25 @@ function App() {
           <Route path="/finalProyect" component={FinalProyect} />
 
           <Route path="/homeAdmin" component={HomeAdmin} />
+          <Route path="/manageTeacherAdmin" component={ManageTeacherAdmin} />
+          <Route path="/registerTeacher" component={RegisterTeacher} />
 
           <Route path="/homeTeacher" component={HomeTeacher} />
           <Route
             path="/managementProposedProjects"
             component={ManagementProposedProjects}
+          ></Route>
+          <Route
+            path="/manageFinalProjectsTeacher"
+            component={ManageFinalProjectsTeacher}
+          ></Route>
+          <Route
+            path="/manageStudentsTeacher"
+            component={ManageStudentsTeacher}
+          ></Route>
+          <Route
+            path="/rateChaptersTeacher"
+            component={RateChaptersTeacher}
           ></Route>
 
           <Route path="/homeStudent" component={HomeStudent} />

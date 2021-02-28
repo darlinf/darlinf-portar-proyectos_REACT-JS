@@ -14,6 +14,10 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Box from "@material-ui/core/Box";
+import CardMedia from "@material-ui/core/CardMedia";
+
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,9 +49,13 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
+  hr: {
+    margin: 0,
+    marginBottom: 13,
+  },
 }));
 
-export default function ManagementProposedProjects() {
+export default function ManageFinalProjectsTeacher() {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -65,7 +73,7 @@ export default function ManagementProposedProjects() {
       <Typography
         style={{ textAlign: "center", marginBottom: "10px", fontSize: 40 }}
       >
-        Gestionar proyectos propuestos
+        Gestionar proyectos finales
       </Typography>
       <Paper component="form" className={classes.root2}>
         <FormControl className={classes.formControl}>
@@ -105,7 +113,7 @@ export default function ManagementProposedProjects() {
         <Divider className={classes.divider} orientation="vertical" />
         <InputBase
           className={classes.input}
-          placeholder="Search Google Maps"
+          placeholder="Buscar por matricula"
           inputProps={{ "aria-label": "search google maps" }}
         />
       </Paper>
@@ -162,24 +170,24 @@ export default function ManagementProposedProjects() {
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
-                    width: "40%",
+                    width: "57%",
                     marginTop: "13px",
                   }}
                 >
                   <Button
                     size="small"
-                    style={{ width: 60, height: 20 }}
+                    style={{ width: 85, height: 20 }}
                     variant="contained"
                     color="secondary"
                   >
-                    Negar
+                    Reeprobar
                   </Button>
                   <Button
                     size="small"
                     variant="contained"
-                    style={{ width: 73, height: 20 }}
+                    style={{ width: 180, height: 20 }}
                   >
-                    Guardar
+                    Aprobar sin publicar
                   </Button>
                   <Button
                     size="small"
@@ -193,52 +201,42 @@ export default function ManagementProposedProjects() {
               </Box>
             </Box>
           </AccordionSummary>
+          <hr className={classes.hr}></hr>
           <AccordionDetails>
-            <Box className={classes.rootCard}>
-              <Box>
-                <Typography
-                  style={{ textAlign: "center" }}
-                  gutterBottom
-                  variant="h5"
-                  component="h2"
-                >
+            <Box
+              style={{ display: "flex", flexDirection: "row", width: "100%" }}
+            >
+              <CardMedia
+                style={{ height: 170, width: "40%" }}
+                image="https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_960,f_auto/10140482_den8mp.png"
+                title="Contemplative Reptile"
+              />
+              <CardContent style={{ height: 170, width: "60%" }}>
+                <Typography gutterBottom variant="h5" component="h2">
                   Lizard
                 </Typography>
-                <Box style={{ display: "flex" }}>
-                  <Box>
-                    <Typography>Descricion</Typography>
-                    <Typography
-                      className="lizardsStyle"
-                      style={{ overflowY: "scroll", height: 100 }}
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      Lizards are a widespread group of squamate reptiles, with
-                      over 6,000 species, ranging across all continents except
-                      Antarctica Lizards are a widespread group of squamate
-                      reptiles, with over 6,000 species, ranging across all
-                      continents except Antarctica
-                    </Typography>
-                  </Box>
-                  <Box style={{ marginLeft: 20 }}>
-                    <Typography>Justificacion</Typography>
-                    <Typography
-                      className="lizardsStyle"
-                      style={{ overflowY: "scroll", height: 100 }}
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      Lizards are a widespread group of squamate reptiles, with
-                      over 6,000 species, ranging across all continents except
-                      Antarctica Lizards are a widespread group of squamate
-                      reptiles, with over 6,000 species, ranging across all
-                      continents except Antarctica
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
+                <Typography
+                  className="lizardsStyle"
+                  style={{ overflowY: "scroll", height: 100 }}
+                  variant="body2"
+                  color="textSecondary"
+                  component="p"
+                >
+                  Lizards are a widespread group of squamate reptiles, with over
+                  6,000 species, ranging across all continents except Antarctica
+                  Lizards are a widespread group of squamate reptiles, with over
+                  6,000 species, ranging across all continents except Antarctica
+                  Lizards are a widespread group of squamate reptiles, with over
+                  6,000 species, ranging across all continents except Antarctica
+                  Lizards are a widespread group of squamate reptiles, with over
+                  6,000 species, ranging across all continents except Antarctica
+                  6,000 species, ranging across all continents except Antarctica
+                  Lizards are a widespread group of squamate reptiles, with over
+                  6,000 species, ranging across all continents except Antarctica
+                  Lizards are a widespread group of squamate reptiles, with over
+                  6,000 species, ranging across all continents except Antarctica
+                </Typography>
+              </CardContent>
             </Box>
           </AccordionDetails>
         </Accordion>

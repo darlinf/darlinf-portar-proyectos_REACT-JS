@@ -14,6 +14,10 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Box from "@material-ui/core/Box";
+import CardMedia from "@material-ui/core/CardMedia";
+
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,9 +49,13 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
+  hr: {
+    margin: 0,
+    marginBottom: 13,
+  },
 }));
 
-export default function ManagementProposedProjects() {
+export default function ManageStudentsTeacher() {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -65,7 +73,7 @@ export default function ManagementProposedProjects() {
       <Typography
         style={{ textAlign: "center", marginBottom: "10px", fontSize: 40 }}
       >
-        Gestionar proyectos propuestos
+        Gestionar estudiantes
       </Typography>
       <Paper component="form" className={classes.root2}>
         <FormControl className={classes.formControl}>
@@ -105,7 +113,7 @@ export default function ManagementProposedProjects() {
         <Divider className={classes.divider} orientation="vertical" />
         <InputBase
           className={classes.input}
-          placeholder="Search Google Maps"
+          placeholder="Buscar por matricula"
           inputProps={{ "aria-label": "search google maps" }}
         />
       </Paper>
@@ -114,15 +122,11 @@ export default function ManagementProposedProjects() {
           expanded={expanded === "panel1"}
           onChange={handleChange("panel1")}
         >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
+          <AccordionSummary>
             <Box
               style={{
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "row",
                 width: "100%",
               }}
             >
@@ -130,7 +134,7 @@ export default function ManagementProposedProjects() {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  width: "100%",
+                  width: "60%",
                 }}
               >
                 <Typography>
@@ -145,102 +149,36 @@ export default function ManagementProposedProjects() {
                     2018-2012
                   </Typography>
                 </Typography>
-                <Typography>
-                  Proyecto:{" "}
-                  <Typography component="span" style={{ fontWeight: "bold" }}>
-                    Tendedor de ropa
-                  </Typography>
-                </Typography>
               </Box>
               <Box
                 onClick={(event) => event.stopPropagation()}
                 onFocus={(event) => event.stopPropagation()}
-                style={{ display: "flex", justifyContent: "space-between" }}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "25%",
+                  marginLeft: "15%",
+                }}
               >
-                <Box></Box>
-                <Box
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "40%",
-                    marginTop: "13px",
-                  }}
+                <Button
+                  size="small"
+                  style={{ width: 80, height: 20 }}
+                  variant="contained"
+                  color="secondary"
                 >
-                  <Button
-                    size="small"
-                    style={{ width: 60, height: 20 }}
-                    variant="contained"
-                    color="secondary"
-                  >
-                    Negar
-                  </Button>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    style={{ width: 73, height: 20 }}
-                  >
-                    Guardar
-                  </Button>
-                  <Button
-                    size="small"
-                    style={{ width: 73, height: 20 }}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Aprobar
-                  </Button>
-                </Box>
+                  Negar
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  style={{ width: 80, height: 20 }}
+                >
+                  Aprobar
+                </Button>
               </Box>
             </Box>
           </AccordionSummary>
-          <AccordionDetails>
-            <Box className={classes.rootCard}>
-              <Box>
-                <Typography
-                  style={{ textAlign: "center" }}
-                  gutterBottom
-                  variant="h5"
-                  component="h2"
-                >
-                  Lizard
-                </Typography>
-                <Box style={{ display: "flex" }}>
-                  <Box>
-                    <Typography>Descricion</Typography>
-                    <Typography
-                      className="lizardsStyle"
-                      style={{ overflowY: "scroll", height: 100 }}
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      Lizards are a widespread group of squamate reptiles, with
-                      over 6,000 species, ranging across all continents except
-                      Antarctica Lizards are a widespread group of squamate
-                      reptiles, with over 6,000 species, ranging across all
-                      continents except Antarctica
-                    </Typography>
-                  </Box>
-                  <Box style={{ marginLeft: 20 }}>
-                    <Typography>Justificacion</Typography>
-                    <Typography
-                      className="lizardsStyle"
-                      style={{ overflowY: "scroll", height: 100 }}
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      Lizards are a widespread group of squamate reptiles, with
-                      over 6,000 species, ranging across all continents except
-                      Antarctica Lizards are a widespread group of squamate
-                      reptiles, with over 6,000 species, ranging across all
-                      continents except Antarctica
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-          </AccordionDetails>
         </Accordion>
 
         <Accordion
