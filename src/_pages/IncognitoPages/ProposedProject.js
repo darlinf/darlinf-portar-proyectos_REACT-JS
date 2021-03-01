@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
@@ -12,8 +12,10 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import "./style/styleFinalProyect.css";
+import { incognitoService } from "../../_services/incognito.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,10 +62,84 @@ const ProposedProject = () => {
 
   const handleChange = (event) => {
     setAge(event.target.value);
+    console.log(event.target.value);
+  };
+
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    incognitoService
+      .getAllProposedProject()
+      .then((data) => {
+        console.log(data);
+        setItems(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const ShowData = () => {
+    if (items)
+      return items.map((item) => {
+        return (
+          <Card>
+            <CardContent>
+              <Typography
+                style={{ textAlign: "center" }}
+                gutterBottom
+                variant="h5"
+                component="h2"
+              >
+                {item.name}
+              </Typography>
+              <Box style={{ display: "flex" }}>
+                <Box style={{ width: "50%" }}>
+                  <Typography>Descricion</Typography>
+                  <Typography
+                    className="lizardsStyle"
+                    style={{ overflowY: "scroll", height: 100 }}
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    {item.description}
+                  </Typography>
+                </Box>
+                <Box style={{ marginLeft: 20, width: "50%" }}>
+                  <Typography>Justificacion</Typography>
+                  <Typography
+                    className="lizardsStyle"
+                    style={{ overflowY: "scroll", height: 100 }}
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    {item.justification}
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        );
+      });
+    else
+      return (
+        <Container
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            width: 940,
+            padding: 0,
+          }}
+        >
+          <CircularProgress />
+        </Container>
+      );
   };
 
   return (
-    <Container style={{ marginTop: "50px" }}>
+    <Container>
       <Typography
         style={{ textAlign: "center", marginBottom: "10px", fontSize: 40 }}
       >
@@ -92,186 +168,16 @@ const ProposedProject = () => {
           inputProps={{ "aria-label": "search google maps" }}
         />
       </Paper>
-
-      <Container style={{ display: "flex", maxWidth: 1000 }}>
-        <Card className={classes.rootCard}>
-          <CardContent>
-            <Typography
-              style={{ textAlign: "center" }}
-              gutterBottom
-              variant="h5"
-              component="h2"
-            >
-              Lizard
-            </Typography>
-            <Box style={{ display: "flex" }}>
-              <Box>
-                <Typography>Descricion</Typography>
-                <Typography
-                  className="lizardsStyle"
-                  style={{ overflowY: "scroll", height: 100 }}
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                >
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </Box>
-              <Box style={{ marginLeft: 20 }}>
-                <Typography>Justificacion</Typography>
-                <Typography
-                  className="lizardsStyle"
-                  style={{ overflowY: "scroll", height: 100 }}
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                >
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
-        <Card className={classes.rootCard}>
-          <CardContent>
-            <Typography
-              style={{ textAlign: "center" }}
-              gutterBottom
-              variant="h5"
-              component="h2"
-            >
-              Lizard
-            </Typography>
-            <Box style={{ display: "flex" }}>
-              <Box>
-                <Typography>Descricion</Typography>
-                <Typography
-                  className="lizardsStyle"
-                  style={{ overflowY: "scroll", height: 100 }}
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                >
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </Box>
-              <Box style={{ marginLeft: 20 }}>
-                <Typography>Justificacion</Typography>
-                <Typography
-                  className="lizardsStyle"
-                  style={{ overflowY: "scroll", height: 100 }}
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                >
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
-      </Container>
-      <Container style={{ display: "flex", maxWidth: 1000 }}>
-        <Card className={classes.rootCard}>
-          <CardContent>
-            <Typography
-              style={{ textAlign: "center" }}
-              gutterBottom
-              variant="h5"
-              component="h2"
-            >
-              Lizard
-            </Typography>
-            <Box style={{ display: "flex" }}>
-              <Box>
-                <Typography>Descricion</Typography>
-                <Typography
-                  className="lizardsStyle"
-                  style={{ overflowY: "scroll", height: 100 }}
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                >
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </Box>
-              <Box style={{ marginLeft: 20 }}>
-                <Typography>Justificacion</Typography>
-                <Typography
-                  className="lizardsStyle"
-                  style={{ overflowY: "scroll", height: 100 }}
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                >
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
-        <Card className={classes.rootCard}>
-          <CardContent>
-            <Typography
-              style={{ textAlign: "center" }}
-              gutterBottom
-              variant="h5"
-              component="h2"
-            >
-              Lizard
-            </Typography>
-            <Box style={{ display: "flex" }}>
-              <Box>
-                <Typography>Descricion</Typography>
-                <Typography
-                  className="lizardsStyle"
-                  style={{ overflowY: "scroll", height: 100 }}
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                >
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </Box>
-              <Box style={{ marginLeft: 20 }}>
-                <Typography>Justificacion</Typography>
-                <Typography
-                  className="lizardsStyle"
-                  style={{ overflowY: "scroll", height: 100 }}
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                >
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
+      <Container
+        style={{
+          display: "grid",
+          gridTemplateColumns: "auto auto",
+          gridGap: "5px",
+          width: 940,
+          padding: 0,
+        }}
+      >
+        <ShowData></ShowData>
       </Container>
     </Container>
   );

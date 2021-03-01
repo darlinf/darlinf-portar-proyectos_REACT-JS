@@ -60,7 +60,7 @@ export default function Navbar(props) {
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             <Link to="/" style={{ color: "#FFFFFF", textDecoration: "none" }}>
-              Home
+              Portar proyectos ITSC
             </Link>
           </Typography>
           {!user.currentUser && <MenuNav></MenuNav>}

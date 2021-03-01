@@ -61,7 +61,7 @@ export default function MenuNav() {
           aria-controls={open ? "menu-list-grow" : undefined}
           aria-haspopup="true"
           onClick={handleToggle}
-          style={{ color: "white" }}
+          style={{ color: "white", margin: 15 }}
         >
           Acceder
         </Button>
