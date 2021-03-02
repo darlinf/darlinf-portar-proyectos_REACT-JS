@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
@@ -13,13 +13,14 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 
 import "./style/styleFinalProyect.css";
+import { incognitoService } from "../../_services/incognito.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: "2px 4px",
     display: "flex",
     alignItems: "center",
     width: 940,
@@ -54,15 +55,99 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: 160,
   },
+
+  rootCard2: {
+    width: "100%",
+  },
+  media2: {
+    height: 160,
+  },
 }));
 
 const FinalProyect = () => {
   const classes = useStyles();
-
+  const [items, setItems] = useState([]);
   const [age, setAge] = React.useState("");
 
   const handleChange = (event) => {
     setAge(event.target.value);
+    console.log(event.target.value);
+    setItems([]);
+    incognitoService
+      .getAllFinalProjectByCareer(event.target.value)
+      .then((data) => {
+        console.log(data);
+        setItems(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    incognitoService
+      .getAllFinalProject()
+      .then((data) => {
+        setItems(data);
+
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const ShowData = () => {
+    if (items[0])
+      return items.map((item) => {
+        return (
+          <Card className={classes.rootCard2}>
+            <CardMedia
+              className={classes.media2}
+              image={item.imageSRC}
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                {item.name}
+              </Typography>
+              <Typography
+                className="lizardsStyle"
+                style={{ overflowY: "scroll", height: 100 }}
+                variant="body2"
+                color="textSecondary"
+                component="p"
+              >
+                {item.description}
+              </Typography>
+            </CardContent>
+            <CardActions
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Calificacion {item.examGrade}</Typography>
+              <Button size="small" color="primary">
+                Ver documentacion
+              </Button>
+            </CardActions>
+          </Card>
+        );
+      });
+    else
+      return (
+        <Container
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            width: 940,
+            padding: 0,
+          }}
+        >
+          <CircularProgress />
+        </Container>
+      );
   };
 
   return (
@@ -82,9 +167,9 @@ const FinalProyect = () => {
             onChange={handleChange}
             style={{ border: "none", width: 200 }}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            <MenuItem value={"gastronomia"}>gastronomia</MenuItem>
+            <MenuItem value={"software"}>software</MenuItem>
+            <MenuItem value={"software2"}>software2</MenuItem>
           </Select>
         </FormControl>
 
@@ -95,224 +180,16 @@ const FinalProyect = () => {
           inputProps={{ "aria-label": "search google maps" }}
         />
       </Paper>
-
-      <Container style={{ display: "flex", maxWidth: 1000 }}>
-        <Card className={classes.rootCard}>
-          <CardMedia
-            className={classes.media}
-            image="https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_960,f_auto/10140482_den8mp.png"
-            title="Contemplative Reptile"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Lizard
-            </Typography>
-            <Typography
-              className="lizardsStyle"
-              style={{ overflowY: "scroll", height: 100 }}
-              variant="body2"
-              color="textSecondary"
-              component="p"
-            >
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography>Calificacion A</Typography>
-            <Button size="small" color="primary">
-              Ver documentacion
-            </Button>
-          </CardActions>
-        </Card>
-
-        <Card className={classes.rootCard}>
-          <CardMedia
-            className={classes.media}
-            image="https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_960,f_auto/10140482_den8mp.png"
-            title="Contemplative Reptile"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Lizard
-            </Typography>
-            <Typography
-              className="lizardsStyle"
-              style={{ overflowY: "scroll", height: 100 }}
-              variant="body2"
-              color="textSecondary"
-              component="p"
-            >
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography>Calificacion A</Typography>
-            <Button size="small" color="primary">
-              Ver documentacion
-            </Button>
-          </CardActions>
-        </Card>
-
-        <Card className={classes.rootCard}>
-          <CardMedia
-            className={classes.media}
-            image="https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_960,f_auto/10140482_den8mp.png"
-            title="Contemplative Reptile"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Lizard
-            </Typography>
-            <Typography
-              className="lizardsStyle"
-              style={{ overflowY: "scroll", height: 100 }}
-              variant="body2"
-              color="textSecondary"
-              component="p"
-            >
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography>Calificacion A</Typography>
-            <Button size="small" color="primary">
-              Ver documentacion
-            </Button>
-          </CardActions>
-        </Card>
-      </Container>
-      <Container style={{ display: "flex", maxWidth: 1000 }}>
-        <Card className={classes.rootCard}>
-          <CardMedia
-            className={classes.media}
-            image="https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_960,f_auto/10140482_den8mp.png"
-            title="Contemplative Reptile"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Lizard
-            </Typography>
-            <Typography
-              className="lizardsStyle"
-              style={{ overflowY: "scroll", height: 100 }}
-              variant="body2"
-              color="textSecondary"
-              component="p"
-            >
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography>Calificacion A</Typography>
-            <Button size="small" color="primary">
-              Ver documentacion
-            </Button>
-          </CardActions>
-        </Card>
-
-        <Card className={classes.rootCard}>
-          <CardMedia
-            className={classes.media}
-            image="https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_960,f_auto/10140482_den8mp.png"
-            title="Contemplative Reptile"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Lizard
-            </Typography>
-            <Typography
-              className="lizardsStyle"
-              style={{ overflowY: "scroll", height: 100 }}
-              variant="body2"
-              color="textSecondary"
-              component="p"
-            >
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography>Calificacion A</Typography>
-            <Button size="small" color="primary">
-              Ver documentacion
-            </Button>
-          </CardActions>
-        </Card>
-
-        <Card className={classes.rootCard}>
-          <CardMedia
-            className={classes.media}
-            image="https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_960,f_auto/10140482_den8mp.png"
-            title="Contemplative Reptile"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Lizard
-            </Typography>
-            <Typography
-              className="lizardsStyle"
-              style={{ overflowY: "scroll", height: 100 }}
-              variant="body2"
-              color="textSecondary"
-              component="p"
-            >
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography>Calificacion A</Typography>
-            <Button size="small" color="primary">
-              Ver documentacion
-            </Button>
-          </CardActions>
-        </Card>
+      <Container
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr 1fr",
+          gridGap: "5px",
+          width: 940,
+          padding: 0,
+        }}
+      >
+        <ShowData></ShowData>
       </Container>
     </Container>
   );

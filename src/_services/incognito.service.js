@@ -18,6 +18,33 @@ function getAllProposedProject() {
       return error;
     });
 }
-function getAllProposedProjectByCareer(career) {}
-function getAllFinalProject() {}
-function getAllFinalProjectByCareer(career) {}
+function getAllProposedProjectByCareer(career) {
+  return axios
+    .get(`${apiUrl}Incognito/GetAllProposedProjectByCareer/${career}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error;
+    });
+}
+function getAllFinalProject() {
+  return axios
+    .get(`${apiUrl}Incognito/GetAllFinalProject`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error;
+    });
+}
+function getAllFinalProjectByCareer(career) {
+  return axios
+    .get(`${apiUrl}Incognito/GetAllFinalProjectByCareer/${career}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error;
+    });
+}

@@ -57,21 +57,28 @@ const useStyles = makeStyles((theme) => ({
 
 const ProposedProject = () => {
   const classes = useStyles();
-
   const [age, setAge] = React.useState("");
+  const [items, setItems] = useState([]);
 
   const handleChange = (event) => {
     setAge(event.target.value);
     console.log(event.target.value);
+    setItems([]);
+    incognitoService
+      .getAllProposedProjectByCareer(event.target.value)
+      .then((data) => {
+        console.log(data);
+        setItems(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
-
-  const [items, setItems] = useState([]);
 
   useEffect(() => {
     incognitoService
       .getAllProposedProject()
       .then((data) => {
-        console.log(data);
         setItems(data);
       })
       .catch((error) => {
@@ -80,10 +87,10 @@ const ProposedProject = () => {
   }, []);
 
   const ShowData = () => {
-    if (items)
+    if (items[0])
       return items.map((item) => {
         return (
-          <Card>
+          <Card key={item.id}>
             <CardContent>
               <Typography
                 style={{ textAlign: "center" }}
@@ -155,23 +162,23 @@ const ProposedProject = () => {
             onChange={handleChange}
             style={{ border: "none", width: 200 }}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            <MenuItem value={"gastronomia"}>gastronomia</MenuItem>
+            <MenuItem value={"software"}>software</MenuItem>
+            <MenuItem value={"software2"}>software2</MenuItem>
           </Select>
         </FormControl>
 
         <Divider className={classes.divider} orientation="vertical" />
         <InputBase
           className={classes.input}
-          placeholder="Search Google Maps"
+          placeholder="Buscar"
           inputProps={{ "aria-label": "search google maps" }}
         />
       </Paper>
       <Container
         style={{
           display: "grid",
-          gridTemplateColumns: "auto auto",
+          gridTemplateColumns: "1fr 1fr",
           gridGap: "5px",
           width: 940,
           padding: 0,
