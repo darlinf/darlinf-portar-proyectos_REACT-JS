@@ -1,5 +1,5 @@
 import axios from "axios";
-const apiUrl = "https://localhost:44342/api/";
+const apiUrl = "https://localhost:5001/api/";
 
 export const studentService = {
   CreateProposedProject,
@@ -53,9 +53,13 @@ function UpdateFinalProyect(finalProyect) {
       return error;
     });
 }
-function GetAllProposedProject(GroupId) {
+function GetAllProposedProject(StudentId, GroupId) {
   return axios
-    .get(`${apiUrl}Student/GetAllProposedProject/${GroupId}`)
+    .get(`${apiUrl}Student/GetAllProposedProject/${StudentId}/${GroupId}`, {
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEwIiwicm9sZSI6IlN0dWRlbnQiLCJuYmYiOjE2MTM0MzUxNDUsImV4cCI6MTYxNDAzOTk0NSwiaWF0IjoxNjEzNDM1MTQ1fQ._qrIzBfSyn4FUhEpT20geciktXgzGIZcLl8PyxeinHw`,
+      },
+    })
     .then((response) => {
       return response.data;
     })

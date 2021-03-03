@@ -95,7 +95,7 @@ export default function Navbar(props) {
                   onClick={() => {
                     handleClose();
                     authenticationService.logout();
-                    // props.history.push({ pathname: "/" });
+                    //props.history.push({ pathname: "/" });
                     console.log(props);
                   }}
                 >

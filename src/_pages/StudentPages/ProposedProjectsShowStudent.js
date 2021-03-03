@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
@@ -15,6 +15,8 @@ import Box from "@material-ui/core/Box";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 
+import { studentService } from "../../_services/student.service";
+import { authenticationService } from "../../_services/authentication.service";
 //import "./style/styleFinalProyect.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -57,12 +59,28 @@ const useStyles = makeStyles((theme) => ({
 
 const ProposedProjectsShowStudent = () => {
   const classes = useStyles();
+  const [items, setItems] = useState([]);
 
   const [age, setAge] = React.useState("");
 
   const handleChange = (event) => {
     setAge(event.target.value);
   };
+
+  useEffect(() => {
+    studentService
+      .GetAllProposedProject(9, "3")
+      .then((data) => {
+        setItems(data);
+
+        var iii = authenticationService.currentUserValue();
+        console.log(iii);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <Container style={{ marginTop: "50px" }}>

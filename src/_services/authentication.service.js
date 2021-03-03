@@ -12,7 +12,7 @@ export const authenticationService = {
   logout,
   register,
   currentUser: currentUserSubject.asObservable(),
-  get currentUserValue() {
+  currentUserValue() {
     return currentUserSubject.value;
   },
 };
@@ -26,7 +26,7 @@ function login(Mail, password) {
 
   //return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
   return fetch(
-    `https://localhost:44342/api/Incognito/authenticate`,
+    `https://localhost:5001/api/Incognito/authenticate`,
     requestOptions
   )
     .then(handleResponse)
