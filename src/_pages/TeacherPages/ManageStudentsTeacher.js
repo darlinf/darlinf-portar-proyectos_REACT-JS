@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -15,6 +15,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Box from "@material-ui/core/Box";
 import CardMedia from "@material-ui/core/CardMedia";
+import { teacherService } from "../../_services/teacher.service";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -58,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ManageStudentsTeacher() {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [items, setItems] = useState([]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -66,7 +68,30 @@ export default function ManageStudentsTeacher() {
 
   const handleChange2 = (event) => {
     setAge(event.target.value);
+    console.log(event.target.value);
+    setItems([]);
+    teacherService
+      .getAllStudentForCredentials(1, "", "")
+      .then((data) => {
+        console.log(data);
+        setItems(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
+
+  useEffect(() => {
+    teacherService
+      .getAllStudentForCredentials(1, "all", "all")
+      .then((data) => {
+        setItems(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <Container style={{ width: 750, marginTop: 50 }}>

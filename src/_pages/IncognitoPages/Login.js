@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Container, Button, Link } from "@material-ui/core";
+import { Card, Container } from "@material-ui/core";
 import styles from "./style/styleLogin";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -65,12 +65,7 @@ export default function Login(props) {
               setStatus();
               authenticationService.login(username, password).then(
                 (user) => {
-                  const { from } = props.location.state || {
-                    from: { pathname: "/" },
-                  };
                   handleRouteRole(user.role);
-                  console.log(user.role);
-                  // props.history.push(from);
                 },
                 (error) => {
                   setSubmitting(false);

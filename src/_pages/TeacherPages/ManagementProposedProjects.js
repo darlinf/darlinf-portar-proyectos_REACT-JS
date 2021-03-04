@@ -14,6 +14,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Box from "@material-ui/core/Box";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { teacherService } from "../../_services/teacher.service";
@@ -49,12 +50,16 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
+  animate: {
+    transition: "opacity 0.10s ease-in-out",
+  },
 }));
 
 export default function ManagementProposedProjects() {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [items, setItems] = useState([]);
+  const [showLinearProgress, setShowLinearProgress] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -65,7 +70,33 @@ export default function ManagementProposedProjects() {
     setAge(event.target.value);
   };
 
-  useEffect(() => {
+  const handleStateProject = (state, item) => {
+    item.state = state;
+    var itemUpdate = {
+      id: item.proposedProjectsId,
+      name: item.name,
+      description: item.description,
+      justification: item.justification,
+      state: state,
+      studentId: item.studentId,
+    };
+    updateApi(itemUpdate);
+  };
+
+  const updateApi = (elem) => {
+    setShowLinearProgress(true);
+    teacherService
+      .updateProjectForEvaluate(elem)
+      .then(() => {
+        getApi();
+        setShowLinearProgress(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const getApi = () => {
     teacherService
       .getAllProjectForEvaluate(1, "all", "all")
       .then((data) => {
@@ -78,137 +109,176 @@ export default function ManagementProposedProjects() {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  useEffect(() => {
+    getApi();
   }, []);
 
   const ShowData = () => {
     if (items[0])
       return items.map((item) => {
         return (
-          <Accordion
-            key={item.proposedProjectsId}
-            expanded={expanded === "panel1" + item.proposedProjectsId}
-            onChange={handleChange("panel1" + item.proposedProjectsId)}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls={"panel1bh-content"}
-              id={"panel1bh-header"}
+          <div key={item.proposedProjectsId}>
+            <Accordion
+              expanded={expanded === "panel1" + item.proposedProjectsId}
+              onChange={handleChange("panel1" + item.proposedProjectsId)}
             >
-              <Box
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  width: "100%",
-                }}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={"panel1bh-content"}
+                id={"panel1bh-header"}
               >
                 <Box
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
+                    flexDirection: "column",
                     width: "100%",
                   }}
                 >
-                  <Typography>
-                    Estudiante:{" "}
-                    <Typography component="span" style={{ fontWeight: "bold" }}>
-                      {item.studenName}
-                    </Typography>
-                  </Typography>
-                  <Typography>
-                    Matricula:{" "}
-                    <Typography component="span" style={{ fontWeight: "bold" }}>
-                      {item.enrollment}
-                    </Typography>
-                  </Typography>
-                  <Typography>
-                    Proyecto:{" "}
-                    <Typography component="span" style={{ fontWeight: "bold" }}>
-                      {item.name}
-                    </Typography>
-                  </Typography>
-                </Box>
-                <Box
-                  onClick={(event) => event.stopPropagation()}
-                  onFocus={(event) => event.stopPropagation()}
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <Box></Box>
                   <Box
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      width: "40%",
-                      marginTop: "13px",
+                      width: "100%",
                     }}
                   >
-                    <Button
-                      size="small"
-                      style={{ width: 60, height: 20 }}
-                      variant="contained"
-                      color="secondary"
+                    <Typography>
+                      Estudiante:{" "}
+                      <Typography
+                        component="span"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {item.studenName}
+                      </Typography>
+                    </Typography>
+                    <Typography>
+                      Matricula:{" "}
+                      <Typography
+                        component="span"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {item.enrollment}
+                      </Typography>
+                    </Typography>
+                    <Typography>
+                      Proyecto:{" "}
+                      <Typography
+                        component="span"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {item.name}
+                      </Typography>
+                    </Typography>
+                  </Box>
+                  <Box
+                    onClick={(event) => event.stopPropagation()}
+                    onFocus={(event) => event.stopPropagation()}
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Box></Box>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "40%",
+                        marginTop: "13px",
+                      }}
                     >
-                      Negar
-                    </Button>
-                    <Button
-                      size="small"
-                      variant="contained"
-                      style={{ width: 73, height: 20 }}
-                    >
-                      Guardar
-                    </Button>
-                    <Button
-                      size="small"
-                      style={{ width: 73, height: 20 }}
-                      variant="contained"
-                      color="primary"
-                    >
-                      Aprobar
-                    </Button>
+                      {item && (
+                        <div>
+                          {item.state !== "denied" && (
+                            <Button
+                              size="small"
+                              style={{ width: 60, height: 20 }}
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => handleStateProject("denied", item)}
+                            >
+                              Negar
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                      {item && (
+                        <div>
+                          {item.state !== "potential" && (
+                            <Button
+                              size="small"
+                              variant="contained"
+                              style={{ width: 73, height: 20 }}
+                              onClick={() =>
+                                handleStateProject("potential", item)
+                              }
+                            >
+                              Guardar
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                      {item && (
+                        <div>
+                          {item.state !== "approved" && (
+                            <Button
+                              size="small"
+                              style={{ width: 73, height: 20 }}
+                              variant="contained"
+                              color="primary"
+                              onClick={() =>
+                                handleStateProject("approved", item)
+                              }
+                            >
+                              Aprobar
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Box className={classes.rootCard}>
-                <Box>
-                  <Box style={{ display: "flex" }}>
-                    <Box style={{ width: "325px" }}>
-                      <Typography>Descricion</Typography>
-                      <Typography
-                        className="lizardsStyle"
-                        style={{
-                          overflowY: "scroll",
+              </AccordionSummary>
+              <AccordionDetails>
+                <Box className={classes.rootCard}>
+                  <Box>
+                    <Box style={{ display: "flex" }}>
+                      <Box style={{ width: "325px" }}>
+                        <Typography>Descricion</Typography>
+                        <Typography
+                          className="lizardsStyle"
+                          style={{
+                            overflowY: "scroll",
 
-                          height: 100,
-                        }}
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        {item.description}
-                      </Typography>
-                    </Box>
-                    <Box style={{ marginLeft: 20, width: "325px" }}>
-                      <Typography>Justificacion</Typography>
-                      <Typography
-                        className="lizardsStyle"
-                        style={{
-                          overflowY: "scroll",
+                            height: 100,
+                          }}
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          {item.description}
+                        </Typography>
+                      </Box>
+                      <Box style={{ marginLeft: 20, width: "325px" }}>
+                        <Typography>Justificacion</Typography>
+                        <Typography
+                          className="lizardsStyle"
+                          style={{
+                            overflowY: "scroll",
 
-                          height: 100,
-                        }}
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        {item.justification}
-                      </Typography>
+                            height: 100,
+                          }}
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          {item.justification}
+                        </Typography>
+                      </Box>
                     </Box>
                   </Box>
                 </Box>
-              </Box>
-            </AccordionDetails>
-          </Accordion>
+              </AccordionDetails>
+            </Accordion>
+          </div>
         );
       });
     else
@@ -217,7 +287,7 @@ export default function ManagementProposedProjects() {
           style={{
             display: "flex",
             justifyContent: "center",
-            width: 940,
+            width: 700,
             padding: 0,
           }}
         >
@@ -276,6 +346,10 @@ export default function ManagementProposedProjects() {
         />
       </Paper>
       <div className={classes.root}>
+        <LinearProgress
+          className={classes.animate}
+          style={{ opacity: showLinearProgress ? 1 : 0 }}
+        />
         <ShowData></ShowData>
       </div>
     </Container>

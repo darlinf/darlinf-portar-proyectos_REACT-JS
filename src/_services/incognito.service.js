@@ -1,5 +1,5 @@
 import axios from "axios";
-const apiUrl = "https://localhost:44342/api/";
+const apiUrl = "https://localhost:5001/api/";
 
 export const incognitoService = {
   getAllProposedProject,

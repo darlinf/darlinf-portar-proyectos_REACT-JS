@@ -1,7 +1,7 @@
 import { BehaviorSubject } from "rxjs";
-
-//import config from 'config';
 import { handleResponse } from "../_helpers/handle-response";
+
+const apiUrl = "https://localhost:5001/api/";
 
 const currentUserSubject = new BehaviorSubject(
   JSON.parse(localStorage.getItem("currentUser"))
@@ -24,11 +24,7 @@ function login(Mail, password) {
     body: JSON.stringify({ Mail, password }),
   };
 
-  //return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
-  return fetch(
-    `https://localhost:5001/api/Incognito/authenticate`,
-    requestOptions
-  )
+  return fetch(`${apiUrl}Incognito/authenticate`, requestOptions)
     .then(handleResponse)
     .then((user) => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -47,10 +43,7 @@ function register(values) {
   };
 
   //return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
-  return fetch(
-    `https://portar-proyectos-itsc-api.azurewebsites.net/users/register`,
-    requestOptions
-  )
+  return fetch(`${apiUrl}Incognito/registerStudent`, requestOptions)
     .then(handleResponse)
     .then((response) => {
       // currentUserSubject.next(user);
