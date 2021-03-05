@@ -1,4 +1,5 @@
 import axios from "axios";
+import { authHeader } from "../_helpers";
 const apiUrl = "https://localhost:5001/api/";
 
 export const adminService = {
@@ -9,8 +10,9 @@ export const adminService = {
 };
 
 function getAllTeacher() {
+  console.log(authHeader());
   return axios
-    .get(`${apiUrl}Admin/GetAllTeacher`)
+    .get(`${apiUrl}Admin/GetAllTeacher`, { headers: authHeader() })
     .then((response) => {
       return response.data;
     })
@@ -20,7 +22,7 @@ function getAllTeacher() {
 }
 function deleteTeacher(id) {
   return axios
-    .delete(`${apiUrl}Admin/DeleteTeacher/${id}`)
+    .delete(`${apiUrl}Admin/DeleteTeacher/${id}`, { headers: authHeader() })
     .then((response) => {
       return response.data;
     })
@@ -30,7 +32,7 @@ function deleteTeacher(id) {
 }
 function editTeacher(teacher) {
   return axios
-    .put(`${apiUrl}Admin/EditTeacher/`, teacher)
+    .put(`${apiUrl}Admin/EditTeacher/`, teacher, { headers: authHeader() })
     .then((response) => {
       return response.data;
     })
@@ -39,8 +41,8 @@ function editTeacher(teacher) {
     });
 }
 function registerTeacher(teacher) {
-  axios
-    .post(`${apiUrl}Admin/registerTeacher`, teacher)
+  return axios
+    .post(`${apiUrl}Admin/registerTeacher`, teacher, { headers: authHeader() })
     .then(function (response) {
       return response.data;
     })

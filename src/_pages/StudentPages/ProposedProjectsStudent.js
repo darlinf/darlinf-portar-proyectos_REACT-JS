@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Container, Button, Link } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
 export default function ProposedProjectsStudent(props) {
+  const [items, setItems] = useState({
+    name: "",
+    description: "",
+    justification: "",
+    state: "",
+    studentId: "",
+  });
+
+  const sendRequest = () => {
+    console.log(items);
+  };
+
   return (
     <Container style={{ width: 500, marginTop: 50 }}>
       <Card variant="outlined">
@@ -23,6 +35,9 @@ export default function ProposedProjectsStudent(props) {
             label="Nombre"
             style={{ marginBottom: 10 }}
             variant="filled"
+            onChange={(e) => {
+              setItems({ name: e.target.value });
+            }}
           />
           <TextField
             style={{ marginBottom: 10 }}
@@ -44,6 +59,7 @@ export default function ProposedProjectsStudent(props) {
               variant="contained"
               color="primary"
               style={{ width: 50, marginTop: 10 }}
+              onClick={sendRequest}
             >
               Crear
             </Button>
