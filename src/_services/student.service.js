@@ -1,4 +1,5 @@
 import axios from "axios";
+import { authHeader } from "../_helpers";
 const apiUrl = "https://localhost:5001/api/";
 
 export const studentService = {
@@ -13,8 +14,10 @@ export const studentService = {
 };
 
 function CreateProposedProject(proposedProject) {
-  axios
-    .post(`${apiUrl}Student/CreateProposedProject`, proposedProject)
+  return axios
+    .post(`${apiUrl}Student/CreateProposedProject`, proposedProject, {
+      headers: authHeader(),
+    })
     .then(function (response) {
       return response.data;
     })
@@ -25,7 +28,9 @@ function CreateProposedProject(proposedProject) {
 
 function GetProposedProject(StudentId) {
   return axios
-    .get(`${apiUrl}Student/GetProposedProject/${StudentId}`)
+    .get(`${apiUrl}Student/GetProposedProject/${StudentId}`, {
+      headers: authHeader(),
+    })
     .then((response) => {
       return response.data;
     })
@@ -35,7 +40,9 @@ function GetProposedProject(StudentId) {
 }
 function GetFinalProyect(StudentId) {
   return axios
-    .get(`${apiUrl}Student/GetFinalProyect/${StudentId}`)
+    .get(`${apiUrl}Student/GetFinalProyect/${StudentId}`, {
+      headers: authHeader(),
+    })
     .then((response) => {
       return response.data;
     })
@@ -45,7 +52,9 @@ function GetFinalProyect(StudentId) {
 }
 function UpdateFinalProyect(finalProyect) {
   return axios
-    .put(`${apiUrl}Student/UpdateFinalProyect/`, finalProyect)
+    .put(`${apiUrl}Student/UpdateFinalProyect/`, finalProyect, {
+      headers: authHeader(),
+    })
     .then((response) => {
       return response.data;
     })
@@ -56,9 +65,7 @@ function UpdateFinalProyect(finalProyect) {
 function GetAllProposedProject(StudentId, GroupId) {
   return axios
     .get(`${apiUrl}Student/GetAllProposedProject/${StudentId}/${GroupId}`, {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEwIiwicm9sZSI6IlN0dWRlbnQiLCJuYmYiOjE2MTM0MzUxNDUsImV4cCI6MTYxNDAzOTk0NSwiaWF0IjoxNjEzNDM1MTQ1fQ._qrIzBfSyn4FUhEpT20geciktXgzGIZcLl8PyxeinHw`,
-      },
+      headers: authHeader(),
     })
     .then((response) => {
       return response.data;
@@ -69,7 +76,9 @@ function GetAllProposedProject(StudentId, GroupId) {
 }
 function UpdateProposedProject(proposedProject) {
   return axios
-    .put(`${apiUrl}Student/UpdateProposedProject/`, proposedProject)
+    .put(`${apiUrl}Student/UpdateProposedProject/`, proposedProject, {
+      headers: authHeader(),
+    })
     .then((response) => {
       return response.data;
     })
@@ -79,7 +88,9 @@ function UpdateProposedProject(proposedProject) {
 }
 function CreateChapterProject(chapterProject) {
   axios
-    .post(`${apiUrl}Student/CreateChapterProject`, chapterProject)
+    .post(`${apiUrl}Student/CreateChapterProject`, chapterProject, {
+      headers: authHeader(),
+    })
     .then(function (response) {
       return response.data;
     })
@@ -89,7 +100,9 @@ function CreateChapterProject(chapterProject) {
 }
 function GetAllChapterProject(StudentId) {
   return axios
-    .get(`${apiUrl}Student/GetAllChapterProject/${StudentId}`)
+    .get(`${apiUrl}Student/GetAllChapterProject/${StudentId}`, {
+      headers: authHeader(),
+    })
     .then((response) => {
       return response.data;
     })

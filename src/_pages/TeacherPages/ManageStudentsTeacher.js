@@ -14,11 +14,9 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Box from "@material-ui/core/Box";
-import CardMedia from "@material-ui/core/CardMedia";
-import { teacherService } from "../../_services/teacher.service";
 
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
+import { teacherService } from "../../_services/teacher.service";
+import { authenticationService } from "../../_services/authentication.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,6 +78,9 @@ export default function ManageStudentsTeacher() {
         console.error(error);
       });
   };
+
+  let student = authenticationService.currentUserValue();
+  console.log(student);
 
   useEffect(() => {
     teacherService

@@ -1,4 +1,6 @@
 import axios from "axios";
+import { authHeader } from "../_helpers";
+
 const apiUrl = "https://localhost:5001/api/";
 
 export const teacherService = {
@@ -15,7 +17,8 @@ export const teacherService = {
 function getAllStudentForCredentials(TeacherId, estudentState, section) {
   return axios
     .get(
-      `${apiUrl}Teacher/getAllStudentForCredentials/${TeacherId}/${estudentState}/${section}`
+      `${apiUrl}Teacher/getAllStudentForCredentials/${TeacherId}/${estudentState}/${section}`,
+      { headers: authHeader() }
     )
     .then((response) => {
       return response.data;
@@ -26,7 +29,9 @@ function getAllStudentForCredentials(TeacherId, estudentState, section) {
 }
 function updateStudentForCredentials(student) {
   return axios
-    .put(`${apiUrl}Teacher/updateStudentForCredentials/`, student)
+    .put(`${apiUrl}Teacher/updateStudentForCredentials/`, student, {
+      headers: authHeader(),
+    })
     .then((response) => {
       return response.data;
     })
@@ -37,7 +42,8 @@ function updateStudentForCredentials(student) {
 function getAllProjectForEvaluate(TeacherId, projectState, section) {
   return axios
     .get(
-      `${apiUrl}Teacher/getAllProjectForEvaluate/${TeacherId}/${projectState}/${section}`
+      `${apiUrl}Teacher/getAllProjectForEvaluate/${TeacherId}/${projectState}/${section}`,
+      { headers: authHeader() }
     )
     .then((response) => {
       return response.data;
@@ -48,7 +54,9 @@ function getAllProjectForEvaluate(TeacherId, projectState, section) {
 }
 function updateProjectForEvaluate(proposedProject) {
   return axios
-    .put(`${apiUrl}Teacher/updateProjectForEvaluate/`, proposedProject)
+    .put(`${apiUrl}Teacher/updateProjectForEvaluate/`, proposedProject, {
+      headers: authHeader(),
+    })
     .then((response) => {
       return response.data;
     })
@@ -59,7 +67,8 @@ function updateProjectForEvaluate(proposedProject) {
 function getAllFinalProjectForEvaluate(TeacherId, projectState, section) {
   return axios
     .get(
-      `${apiUrl}Teacher/getAllFinalProjectForEvaluate/${TeacherId}/${projectState}/${section}`
+      `${apiUrl}Teacher/getAllFinalProjectForEvaluate/${TeacherId}/${projectState}/${section}`,
+      { headers: authHeader() }
     )
     .then((response) => {
       return response.data;
@@ -70,7 +79,9 @@ function getAllFinalProjectForEvaluate(TeacherId, projectState, section) {
 }
 function updateFinalProject(finalProject) {
   return axios
-    .put(`${apiUrl}Teacher/updateFinalProject/`, finalProject)
+    .put(`${apiUrl}Teacher/updateFinalProject/`, finalProject, {
+      headers: authHeader(),
+    })
     .then((response) => {
       return response.data;
     })
@@ -80,7 +91,9 @@ function updateFinalProject(finalProject) {
 }
 function getAllChapterProject(TeacherId) {
   return axios
-    .get(`${apiUrl}Teacher/getAllChapterProject/${TeacherId}`)
+    .get(`${apiUrl}Teacher/getAllChapterProject/${TeacherId}`, {
+      headers: authHeader(),
+    })
     .then((response) => {
       return response.data;
     })
@@ -90,7 +103,9 @@ function getAllChapterProject(TeacherId) {
 }
 function updateChapterProject(chapterProject) {
   return axios
-    .put(`${apiUrl}Teacher/updateChapterProject/`, chapterProject)
+    .put(`${apiUrl}Teacher/updateChapterProject/`, chapterProject, {
+      headers: authHeader(),
+    })
     .then((response) => {
       return response.data;
     })
