@@ -15,6 +15,7 @@ import Box from "@material-ui/core/Box";
 import CardActions from "@material-ui/core/CardActions";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 
 import { studentService } from "../../_services/student.service";
 import { authenticationService } from "../../_services/authentication.service";
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 const ProposedProjectsShowStudent = () => {
   const classes = useStyles();
   const [items, setItems] = useState([]);
+  const [proposedProjectState, setProposedProjectState] = useState(false);
   const [studentId] = useState(
     authenticationService.currentUserValue().studentId
   );
@@ -78,6 +80,11 @@ const ProposedProjectsShowStudent = () => {
       .GetAllProposedProject(9, "3")
       .then((data) => {
         setItems(data);
+        data.forEach((x) => {
+          if (x.state === "approved") {
+            setProposedProjectState(true);
+          }
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -139,12 +146,26 @@ const ProposedProjectsShowStudent = () => {
                     </Typography>
                   </Typography>
                 </CardActions>
-                {item.studentId === studentId && (
+                {item.studentId === studentId && !proposedProjectState && (
                   <Box
                     style={{ display: "flex", flexDirection: "row-reverse" }}
                   >
                     <Button variant="outlined" color="primary" size="small">
                       Editar
+                    </Button>
+                  </Box>
+                )}
+                {item.studentId === studentId && item.state === "approved" && (
+                  <Box
+                    style={{ display: "flex", flexDirection: "row-reverse" }}
+                  >
+                    <Button variant="outlined" color="primary" size="small">
+                      <Link
+                        to="/finalProjectStudent"
+                        style={{ textDecoration: "none" }}
+                      >
+                        Completar
+                      </Link>
                     </Button>
                   </Box>
                 )}

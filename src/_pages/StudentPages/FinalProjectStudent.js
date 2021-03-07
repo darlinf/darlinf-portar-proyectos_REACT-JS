@@ -7,6 +7,9 @@ import IconButton from "@material-ui/core/IconButton";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import { makeStyles } from "@material-ui/core/styles";
 
+import ReactUploadImage from "../../_components/ReactUploadImage";
+const axios = require("axios");
+
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -20,83 +23,88 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FinalProjectStudent(props) {
   const classes = useStyles();
+  const [state, setState] = React.useState({ file: null });
+  const [state2, setState2] = React.useState({ file: null });
+  const [description, setDescription] = React.useState({ file: null });
+  let imgUrl, pdfUrl;
+
+  //send image
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", state.file);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios
+      .post("https://localhost:5001/api/Upload/upload", formData, config)
+      .then((response) => {
+        console.log(response);
+        imgUrl = response.data;
+        if (imgUrl && pdfUrl) createFinalProject();
+      })
+      .catch((error) => {});
+  };
+  const onChange = (e) => {
+    setState({ file: e.target.files[0] });
+  };
+  //send pdf
+  const onFormSubmit2 = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", state2.file);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios
+      .post("https://localhost:5001/api/Upload/upload", formData, config)
+      .then((response) => {
+        console.log(response);
+        pdfUrl = response.data;
+        if (imgUrl && pdfUrl) createFinalProject();
+      })
+      .catch((error) => {});
+  };
+  const onChange2 = (e) => {
+    setState2({ file: e.target.files[0] });
+  };
+
+  const createFinalProject = () => {
+    let data = {
+      ImageSRC: imgUrl,
+      FinalDocumentationSRC: pdfUrl,
+      Description: description,
+    };
+
+    console.log(data);
+  };
+
   return (
     <Container style={{ width: 500, marginTop: 50 }}>
       <Card variant="outlined">
         <form
-          noValidate
-          autoComplete="off"
-          style={{ display: "flex", flexDirection: "column", margin: 20 }}
+          onSubmit={(e) => {
+            onFormSubmit(e);
+            onFormSubmit2(e);
+          }}
         >
-          <Typography
-            style={{ textAlign: "center", fontSize: 30, marginBottom: 10 }}
-          >
-            Crear proyecto final
-          </Typography>
-
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              border: "solid #E8E8E8 1px",
-              marginBottom: 8,
-              backgroundColor: "#E8E8E8",
-              borderRadius: 5,
-            }}
-          >
-            <Typography
-              style={{
-                lineHeight: 3,
-                marginLeft: 7,
-              }}
-            >
-              Imagen de portada
-            </Typography>
-            <div className={classes.root}>
-              <input
-                accept="image/*"
-                className={classes.input}
-                id="contained-button-file"
-                multiple
-                type="file"
-              />
-              <label htmlFor="contained-button-file">
-                <Button variant="contained" color="primary" component="span">
-                  Seleccionar imagen
-                </Button>
-              </label>
-            </div>
-          </Box>
-
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: 10,
-              border: "solid #E8E8E8 1px",
-              backgroundColor: "#E8E8E8",
-              borderRadius: 5,
-            }}
-          >
-            <Typography style={{ marginLeft: 7, lineHeight: 3 }}>
-              Documentacion final
-            </Typography>
-            <div className={classes.root}>
-              <input
-                accept="image/*"
-                className={classes.input}
-                id="contained-button-file"
-                multiple
-                type="file"
-              />
-              <label htmlFor="contained-button-file">
-                <Button variant="contained" color="primary" component="span">
-                  Seleccionar PDF
-                </Button>
-              </label>
-            </div>
-          </Box>
-
+          <h1>Imagen de portada</h1>
+          <input
+            className="btn"
+            type="file"
+            name="myImage"
+            onChange={onChange}
+          />
+          <input
+            className="btn"
+            type="file"
+            name="myImage"
+            onChange={onChange2}
+          />
           <TextField
             style={{ marginBottom: 10 }}
             label="Descripción"
@@ -104,17 +112,11 @@ export default function FinalProjectStudent(props) {
             rows={4}
             defaultValue=""
             variant="filled"
+            onChange={(e) => setDescription(e.target.value)}
           />
-
-          <Box style={{ display: "flex", flexDirection: "row-reverse" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ width: 50, marginTop: 10 }}
-            >
-              Crear
-            </Button>
-          </Box>
+          <button className="btn btn-primary" type="submit">
+            Upload
+          </button>
         </form>
       </Card>
     </Container>

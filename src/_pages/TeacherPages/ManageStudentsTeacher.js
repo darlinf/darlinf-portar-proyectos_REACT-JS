@@ -14,6 +14,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Box from "@material-ui/core/Box";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { teacherService } from "../../_services/teacher.service";
 import { authenticationService } from "../../_services/authentication.service";
@@ -79,12 +80,10 @@ export default function ManageStudentsTeacher() {
       });
   };
 
-  let student = authenticationService.currentUserValue();
-  console.log(student);
-
   useEffect(() => {
+    let student = authenticationService.currentUserValue();
     teacherService
-      .getAllStudentForCredentials(1, "all", "all")
+      .getAllStudentForCredentials(student.teacherId, "all", "all")
       .then((data) => {
         setItems(data);
         console.log(data);
@@ -93,6 +92,90 @@ export default function ManageStudentsTeacher() {
         console.error(error);
       });
   }, []);
+
+  const ShowData = () => {
+    if (items[0])
+      return items.map((item) => {
+        return (
+          <Accordion
+            key={item.studentId}
+            expanded={expanded === "panel1" + item.studentId}
+            onChange={handleChange("panel1" + item.studentId)}
+          >
+            <AccordionSummary>
+              <Box
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  width: "100%",
+                }}
+              >
+                <Box
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "60%",
+                  }}
+                >
+                  <Typography>
+                    Estudiante:{" "}
+                    <Typography component="span" style={{ fontWeight: "bold" }}>
+                      {item.name}
+                    </Typography>
+                  </Typography>
+                  <Typography>
+                    Matricula:{" "}
+                    <Typography component="span" style={{ fontWeight: "bold" }}>
+                      {item.enrollment}
+                    </Typography>
+                  </Typography>
+                </Box>
+                <Box
+                  onClick={(event) => event.stopPropagation()}
+                  onFocus={(event) => event.stopPropagation()}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "25%",
+                    marginLeft: "15%",
+                  }}
+                >
+                  <Button
+                    size="small"
+                    style={{ width: 80, height: 20 }}
+                    variant="contained"
+                    color="secondary"
+                  >
+                    Negar
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="primary"
+                    style={{ width: 80, height: 20 }}
+                  >
+                    Aprobar
+                  </Button>
+                </Box>
+              </Box>
+            </AccordionSummary>
+          </Accordion>
+        );
+      });
+    else
+      return (
+        <Container
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            width: 940,
+            padding: 0,
+          }}
+        >
+          <CircularProgress />
+        </Container>
+      );
+  };
 
   return (
     <Container style={{ width: 750, marginTop: 50 }}>
@@ -144,132 +227,7 @@ export default function ManageStudentsTeacher() {
         />
       </Paper>
       <div className={classes.root}>
-        <Accordion
-          expanded={expanded === "panel1"}
-          onChange={handleChange("panel1")}
-        >
-          <AccordionSummary>
-            <Box
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                width: "100%",
-              }}
-            >
-              <Box
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "60%",
-                }}
-              >
-                <Typography>
-                  Estudiante:{" "}
-                  <Typography component="span" style={{ fontWeight: "bold" }}>
-                    Carlos Gomez
-                  </Typography>
-                </Typography>
-                <Typography>
-                  Matricula:{" "}
-                  <Typography component="span" style={{ fontWeight: "bold" }}>
-                    2018-2012
-                  </Typography>
-                </Typography>
-              </Box>
-              <Box
-                onClick={(event) => event.stopPropagation()}
-                onFocus={(event) => event.stopPropagation()}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "25%",
-                  marginLeft: "15%",
-                }}
-              >
-                <Button
-                  size="small"
-                  style={{ width: 80, height: 20 }}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Negar
-                </Button>
-                <Button
-                  size="small"
-                  variant="contained"
-                  color="primary"
-                  style={{ width: 80, height: 20 }}
-                >
-                  Aprobar
-                </Button>
-              </Box>
-            </Box>
-          </AccordionSummary>
-        </Accordion>
-
-        <Accordion
-          expanded={expanded === "panel2"}
-          onChange={handleChange("panel2")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2bh-content"
-            id="panel2bh-header"
-          >
-            <Typography className={classes.heading}>Users</Typography>
-            <Typography className={classes.secondaryHeading}>
-              You are currently not an owner
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Donec placerat, lectus sed mattis semper, neque lectus feugiat
-              lectus, varius pulvinar diam eros in elit. Pellentesque convallis
-              laoreet laoreet.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          expanded={expanded === "panel3"}
-          onChange={handleChange("panel3")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel3bh-content"
-            id="panel3bh-header"
-          >
-            <Typography className={classes.heading}>
-              Advanced settings
-            </Typography>
-            <Typography className={classes.secondaryHeading}>
-              Filtering has been entirely disabled for whole web server
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
-              sit amet egestas eros, vitae egestas augue. Duis vel est augue.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          expanded={expanded === "panel4"}
-          onChange={handleChange("panel4")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel4bh-content"
-            id="panel4bh-header"
-          >
-            <Typography className={classes.heading}>Personal data</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
-              sit amet egestas eros, vitae egestas augue. Duis vel est augue.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
+        <ShowData></ShowData>
       </div>
     </Container>
   );
