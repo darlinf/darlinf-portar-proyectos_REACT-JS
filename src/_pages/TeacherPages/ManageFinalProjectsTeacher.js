@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -15,9 +15,15 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Box from "@material-ui/core/Box";
 import CardMedia from "@material-ui/core/CardMedia";
-
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Menu from "@material-ui/core/Menu";
+
+import { teacherService } from "../../_services/teacher.service";
+import { authenticationService } from "../../_services/authentication.service";
+
+const teacher = authenticationService.currentUserValue();
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,8 +62,85 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ManageFinalProjectsTeacher() {
+  const handleSetValue = (value, button, elem) => {
+    let stateTo = button === "Aprobar" ? "approved" : "approved and not";
+    let itemUpdate = {
+      ImageSRC: elem.imageSRC,
+      FinalDocumentationSRC: elem.finalDocumentationSRC,
+      Description: elem.description,
+      name: elem.name,
+      studentId: elem.studentId,
+      state: stateTo,
+      examGrade: value,
+    };
+    console.log(itemUpdate);
+    //updateApi(itemUpdate);
+  };
+
+  function SimpleMenu({ name, color, styles, elem }) {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    return (
+      <div>
+        <Button
+          aria-controls="simple-menu"
+          aria-haspopup="true"
+          onClick={handleClick}
+          size="small"
+          style={styles}
+          variant="contained"
+          color={color}
+        >
+          {name}
+        </Button>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              handleSetValue("A", name, elem);
+            }}
+          >
+            A
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              handleSetValue("B", name, elem);
+            }}
+          >
+            B
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              handleSetValue("C", name, elem);
+            }}
+          >
+            C
+          </MenuItem>
+        </Menu>
+      </div>
+    );
+  }
+
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+
+  const [items, setItems] = useState([]);
+  const [showLinearProgress, setShowLinearProgress] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -66,6 +149,179 @@ export default function ManageFinalProjectsTeacher() {
 
   const handleChange2 = (event) => {
     setAge(event.target.value);
+  };
+
+  const updateApi = (elem) => {
+    setShowLinearProgress(true);
+    teacherService
+      .updateFinalProject(elem)
+      .then(() => {
+        getApi();
+        setShowLinearProgress(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const getApi = () => {
+    teacherService
+      .getAllFinalProjectForEvaluate(1, "all", "all")
+      .then((data) => {
+        setItems(data);
+
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    getApi();
+  }, []);
+
+  const ShowData = () => {
+    if (items[0])
+      return items.map((item) => {
+        return (
+          <div key={item.studentId}>
+            <Accordion
+              expanded={expanded === "panel1" + item.studentId}
+              onChange={handleChange("panel1" + item.studentId)}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+              >
+                <Box
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                  }}
+                >
+                  <Box
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                  >
+                    <Typography>
+                      Estudiante:{" "}
+                      <Typography
+                        component="span"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {item.studenName}
+                      </Typography>
+                    </Typography>
+                    <Typography>
+                      Matricula:{" "}
+                      <Typography
+                        component="span"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {item.enrollment}
+                      </Typography>
+                    </Typography>
+                    <Typography>
+                      Proyecto:{" "}
+                      <Typography
+                        component="span"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {item.name}
+                      </Typography>
+                    </Typography>
+                  </Box>
+                  <Box
+                    onClick={(event) => event.stopPropagation()}
+                    onFocus={(event) => event.stopPropagation()}
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Box></Box>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "57%",
+                        marginTop: "13px",
+                      }}
+                    >
+                      <Button
+                        size="small"
+                        style={{ width: 85, height: 20 }}
+                        variant="contained"
+                        color="secondary"
+                      >
+                        Reeprobar
+                      </Button>
+                      <SimpleMenu
+                        name="Aprobar sin publicar"
+                        color=""
+                        elem={item}
+                        styles={{ width: 180, height: 20 }}
+                      ></SimpleMenu>
+                      <SimpleMenu
+                        name="Aprobar"
+                        color="primary"
+                        elem={item}
+                        styles={{ width: 73, height: 20 }}
+                      ></SimpleMenu>
+                    </Box>
+                  </Box>
+                </Box>
+              </AccordionSummary>
+              <hr className={classes.hr}></hr>
+              <AccordionDetails>
+                <Box
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    width: "100%",
+                  }}
+                >
+                  <CardMedia
+                    style={{ height: 170, width: "40%" }}
+                    image={"https://localhost:5001/" + item.imageSRC}
+                    title="Contemplative Reptile"
+                  />
+                  <CardContent style={{ height: 170, width: "60%" }}>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {item.name}
+                    </Typography>
+                    <Typography
+                      className="lizardsStyle"
+                      style={{ overflowY: "scroll", height: 100 }}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      {item.description}
+                    </Typography>
+                  </CardContent>
+                </Box>
+              </AccordionDetails>
+            </Accordion>
+          </div>
+        );
+      });
+    else
+      return (
+        <Container
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            width: 700,
+            padding: 0,
+          }}
+        >
+          <CircularProgress />
+        </Container>
+      );
   };
 
   return (
@@ -118,192 +374,7 @@ export default function ManageFinalProjectsTeacher() {
         />
       </Paper>
       <div className={classes.root}>
-        <Accordion
-          expanded={expanded === "panel1"}
-          onChange={handleChange("panel1")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <Box
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                width: "100%",
-              }}
-            >
-              <Box
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                <Typography>
-                  Estudiante:{" "}
-                  <Typography component="span" style={{ fontWeight: "bold" }}>
-                    Carlos Gomez
-                  </Typography>
-                </Typography>
-                <Typography>
-                  Matricula:{" "}
-                  <Typography component="span" style={{ fontWeight: "bold" }}>
-                    2018-2012
-                  </Typography>
-                </Typography>
-                <Typography>
-                  Proyecto:{" "}
-                  <Typography component="span" style={{ fontWeight: "bold" }}>
-                    Tendedor de ropa
-                  </Typography>
-                </Typography>
-              </Box>
-              <Box
-                onClick={(event) => event.stopPropagation()}
-                onFocus={(event) => event.stopPropagation()}
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Box></Box>
-                <Box
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "57%",
-                    marginTop: "13px",
-                  }}
-                >
-                  <Button
-                    size="small"
-                    style={{ width: 85, height: 20 }}
-                    variant="contained"
-                    color="secondary"
-                  >
-                    Reeprobar
-                  </Button>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    style={{ width: 180, height: 20 }}
-                  >
-                    Aprobar sin publicar
-                  </Button>
-                  <Button
-                    size="small"
-                    style={{ width: 73, height: 20 }}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Aprobar
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-          </AccordionSummary>
-          <hr className={classes.hr}></hr>
-          <AccordionDetails>
-            <Box
-              style={{ display: "flex", flexDirection: "row", width: "100%" }}
-            >
-              <CardMedia
-                style={{ height: 170, width: "40%" }}
-                image="https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_960,f_auto/10140482_den8mp.png"
-                title="Contemplative Reptile"
-              />
-              <CardContent style={{ height: 170, width: "60%" }}>
-                <Typography gutterBottom variant="h5" component="h2">
-                  Lizard
-                </Typography>
-                <Typography
-                  className="lizardsStyle"
-                  style={{ overflowY: "scroll", height: 100 }}
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                >
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </CardContent>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion
-          expanded={expanded === "panel2"}
-          onChange={handleChange("panel2")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2bh-content"
-            id="panel2bh-header"
-          >
-            <Typography className={classes.heading}>Users</Typography>
-            <Typography className={classes.secondaryHeading}>
-              You are currently not an owner
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Donec placerat, lectus sed mattis semper, neque lectus feugiat
-              lectus, varius pulvinar diam eros in elit. Pellentesque convallis
-              laoreet laoreet.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          expanded={expanded === "panel3"}
-          onChange={handleChange("panel3")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel3bh-content"
-            id="panel3bh-header"
-          >
-            <Typography className={classes.heading}>
-              Advanced settings
-            </Typography>
-            <Typography className={classes.secondaryHeading}>
-              Filtering has been entirely disabled for whole web server
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
-              sit amet egestas eros, vitae egestas augue. Duis vel est augue.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          expanded={expanded === "panel4"}
-          onChange={handleChange("panel4")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel4bh-content"
-            id="panel4bh-header"
-          >
-            <Typography className={classes.heading}>Personal data</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
-              sit amet egestas eros, vitae egestas augue. Duis vel est augue.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
+        <ShowData></ShowData>
       </div>
     </Container>
   );

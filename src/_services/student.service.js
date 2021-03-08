@@ -11,6 +11,7 @@ export const studentService = {
   UpdateProposedProject,
   CreateChapterProject,
   GetAllChapterProject,
+  createFinalProject,
 };
 
 function CreateProposedProject(proposedProject) {
@@ -89,6 +90,18 @@ function UpdateProposedProject(proposedProject) {
 function CreateChapterProject(chapterProject) {
   axios
     .post(`${apiUrl}Student/CreateChapterProject`, chapterProject, {
+      headers: authHeader(),
+    })
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      return error;
+    });
+}
+function createFinalProject(chapterProject) {
+  axios
+    .post(`${apiUrl}Student/CreateFinalProyect`, chapterProject, {
       headers: authHeader(),
     })
     .then(function (response) {

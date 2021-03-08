@@ -161,7 +161,7 @@ const ProposedProjectsShowStudent = () => {
                   >
                     <Button variant="outlined" color="primary" size="small">
                       <Link
-                        to="/finalProjectStudent"
+                        to={"/finalProjectStudent/" + item.name}
                         style={{ textDecoration: "none" }}
                       >
                         Completar

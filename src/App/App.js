@@ -1,5 +1,10 @@
 import Navbar from "../_components/navbar";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Home from "../_pages/IncognitoPages/Home";
 import Login from "../_pages/IncognitoPages/Login";
 import Register from "../_pages/IncognitoPages/Register";
@@ -69,7 +74,7 @@ function App() {
             component={ProposedProjectsShowStudent}
           />
           <Route
-            path="/finalProjectStudent"
+            path="/finalProjectStudent/:id"
             component={FinalProjectStudent}
           ></Route>
           <Route

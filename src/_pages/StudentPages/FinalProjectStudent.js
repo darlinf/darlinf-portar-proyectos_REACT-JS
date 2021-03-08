@@ -6,9 +6,11 @@ import Box from "@material-ui/core/Box";
 import IconButton from "@material-ui/core/IconButton";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import { makeStyles } from "@material-ui/core/styles";
+import { authenticationService } from "../../_services/authentication.service";
+import { studentService } from "../../_services/student.service";
 
-import ReactUploadImage from "../../_components/ReactUploadImage";
 const axios = require("axios");
+const student = authenticationService.currentUserValue();
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,9 +21,18 @@ const useStyles = makeStyles((theme) => ({
   input: {
     display: "none",
   },
+  myStyles: {
+    display: "flex",
+    flexDirection: "column",
+    padding: 20,
+  },
+  magi: {
+    marginTop: 15,
+    marginBottom: 4,
+  },
 }));
 
-export default function FinalProjectStudent(props) {
+export default function FinalProjectStudent({ match: { params } }) {
   const classes = useStyles();
   const [state, setState] = React.useState({ file: null });
   const [state2, setState2] = React.useState({ file: null });
@@ -74,51 +85,74 @@ export default function FinalProjectStudent(props) {
   };
 
   const createFinalProject = () => {
+    console.log("dddddd");
     let data = {
       ImageSRC: imgUrl,
       FinalDocumentationSRC: pdfUrl,
       Description: description,
+      name: params.id,
+      studentId: student.studentId,
+      state: "evaluate",
     };
-
     console.log(data);
+
+    studentService
+      .createFinalProject(data)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {});
   };
 
   return (
-    <Container style={{ width: 500, marginTop: 50 }}>
-      <Card variant="outlined">
-        <form
-          onSubmit={(e) => {
-            onFormSubmit(e);
-            onFormSubmit2(e);
-          }}
-        >
-          <h1>Imagen de portada</h1>
-          <input
-            className="btn"
-            type="file"
-            name="myImage"
-            onChange={onChange}
-          />
-          <input
-            className="btn"
-            type="file"
-            name="myImage"
-            onChange={onChange2}
-          />
-          <TextField
-            style={{ marginBottom: 10 }}
-            label="Descripción"
-            multiline
-            rows={4}
-            defaultValue=""
-            variant="filled"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <button className="btn btn-primary" type="submit">
-            Upload
-          </button>
-        </form>
-      </Card>
-    </Container>
+    <div>
+      <Typography style={{ textAlign: "center", marginTop: 50, fontSize: 30 }}>
+        Completar informacion del proyecto final:
+      </Typography>
+      <Typography
+        style={{ textAlign: "center", fontSize: 30, fontWeight: "500" }}
+      >
+        {params.id}
+      </Typography>
+      <Container style={{ width: 500, marginTop: 20 }}>
+        <Card variant="outlined">
+          <form
+            className={classes.myStyles}
+            onSubmit={(e) => {
+              onFormSubmit(e);
+              onFormSubmit2(e);
+            }}
+          >
+            <h1>Imagen de portada</h1>
+            <input
+              className="btn btn-light"
+              type="file"
+              name="myImage"
+              onChange={onChange}
+            />
+            <h1 className={classes.magi}>Documentacion final</h1>
+            <input
+              className="btn btn-light"
+              type="file"
+              name="myImage"
+              onChange={onChange2}
+            />
+            <TextField
+              style={{ marginButton: 10 }}
+              className={classes.magi}
+              label="Descripción"
+              multiline
+              rows={4}
+              defaultValue=""
+              variant="filled"
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <button className="btn btn-primary" type="submit">
+              Crear
+            </button>
+          </form>
+        </Card>
+      </Container>
+    </div>
   );
 }

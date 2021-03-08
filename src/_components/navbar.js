@@ -107,14 +107,7 @@ export default function Navbar(props) {
                       Propuesto
                     </Link>
                   </Button>
-                  <Button>
-                    <Link
-                      to="/rateChaptersTeacher"
-                      style={{ color: "white", textDecoration: "none" }}
-                    >
-                      Capitulo
-                    </Link>
-                  </Button>
+
                   <Button>
                     <Link
                       to="/manageFinalProjectsTeacher"
@@ -161,22 +154,6 @@ export default function Navbar(props) {
                       style={{ color: "white", textDecoration: "none" }}
                     >
                       propuestos
-                    </Link>
-                  </Button>
-                  <Button>
-                    <Link
-                      to="/projectChapterShowStudent"
-                      style={{ color: "white", textDecoration: "none" }}
-                    >
-                      Capitulo
-                    </Link>
-                  </Button>
-                  <Button>
-                    <Link
-                      to="/projectChapterStudent"
-                      style={{ color: "white", textDecoration: "none" }}
-                    >
-                      Crear Capitulo
                     </Link>
                   </Button>
                 </div>
@@ -229,3 +206,31 @@ export default function Navbar(props) {
     </div>
   );
 }
+
+/* <Button>
+                    <Link
+                      to="/projectChapterShowStudent"
+                      style={{ color: "white", textDecoration: "none" }}
+                    >
+                      Capitulo
+                    </Link>
+                  </Button>
+                  <Button>
+                    <Link
+                      to="/projectChapterStudent"
+                      style={{ color: "white", textDecoration: "none" }}
+                    >
+                      Crear Capitulo
+                    </Link>
+                  </Button>
+                  
+                   <Button>
+                    <Link
+                      to="/rateChaptersTeacher"
+                      style={{ color: "white", textDecoration: "none" }}
+                    >
+                      Capitulo
+                    </Link>
+                  </Button>
+                  
+                  */

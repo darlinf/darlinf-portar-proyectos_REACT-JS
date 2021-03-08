@@ -104,7 +104,7 @@ const FinalProyect = () => {
           <Card className={classes.rootCard2}>
             <CardMedia
               className={classes.media2}
-              image={item.imageSRC}
+              image={"https://localhost:5001/" + item.imageSRC}
               title="Contemplative Reptile"
             />
             <CardContent>
