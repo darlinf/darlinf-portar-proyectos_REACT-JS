@@ -19,6 +19,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Menu from "@material-ui/core/Menu";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import { teacherService } from "../../_services/teacher.service";
 import { authenticationService } from "../../_services/authentication.service";
@@ -63,8 +64,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ManageFinalProjectsTeacher() {
   const handleSetValue = (value, button, elem) => {
-    let stateTo = button === "Aprobar" ? "approved" : "approved and not";
+    let stateTo;
+    if (button !== "denied")
+      stateTo = button === "Aprobar" ? "approved" : "approved and not";
+    else stateTo = button;
     let itemUpdate = {
+      id: elem.finalProjectId,
       ImageSRC: elem.imageSRC,
       FinalDocumentationSRC: elem.finalDocumentationSRC,
       Description: elem.description,
@@ -74,7 +79,7 @@ export default function ManageFinalProjectsTeacher() {
       examGrade: value,
     };
     console.log(itemUpdate);
-    //updateApi(itemUpdate);
+    updateApi(itemUpdate);
   };
 
   function SimpleMenu({ name, color, styles, elem }) {
@@ -247,30 +252,40 @@ export default function ManageFinalProjectsTeacher() {
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
-                        width: "57%",
                         marginTop: "13px",
                       }}
                     >
-                      <Button
-                        size="small"
-                        style={{ width: 85, height: 20 }}
-                        variant="contained"
-                        color="secondary"
-                      >
-                        Reeprobar
-                      </Button>
-                      <SimpleMenu
-                        name="Aprobar sin publicar"
-                        color=""
-                        elem={item}
-                        styles={{ width: 180, height: 20 }}
-                      ></SimpleMenu>
-                      <SimpleMenu
-                        name="Aprobar"
-                        color="primary"
-                        elem={item}
-                        styles={{ width: 73, height: 20 }}
-                      ></SimpleMenu>
+                      {item.state !== "denied" && (
+                        <Button
+                          size="small"
+                          style={{ width: 85, height: 20, marginRight: 4 }}
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => {
+                            handleSetValue(null, "denied", item);
+                          }}
+                        >
+                          Reeprobar
+                        </Button>
+                      )}
+
+                      {item.state !== "approved and not" && (
+                        <SimpleMenu
+                          name="Aprobar sin publicar"
+                          color=""
+                          elem={item}
+                          styles={{ width: 180, height: 20, marginRight: 4 }}
+                        ></SimpleMenu>
+                      )}
+
+                      {item.state !== "approved" && (
+                        <SimpleMenu
+                          name="Aprobar"
+                          color="primary"
+                          elem={item}
+                          styles={{ width: 73, height: 20, marginRight: 4 }}
+                        ></SimpleMenu>
+                      )}
                     </Box>
                   </Box>
                 </Box>
@@ -374,6 +389,10 @@ export default function ManageFinalProjectsTeacher() {
         />
       </Paper>
       <div className={classes.root}>
+        <LinearProgress
+          className={classes.animate}
+          style={{ opacity: showLinearProgress ? 1 : 0 }}
+        />
         <ShowData></ShowData>
       </div>
     </Container>

@@ -15,9 +15,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import { teacherService } from "../../_services/teacher.service";
 import { authenticationService } from "../../_services/authentication.service";
+
+let teacher = authenticationService.currentUserValue();
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,6 +62,7 @@ export default function ManageStudentsTeacher() {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [items, setItems] = useState([]);
+  const [showLinearProgress, setShowLinearProgress] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -67,13 +71,28 @@ export default function ManageStudentsTeacher() {
 
   const handleChange2 = (event) => {
     setAge(event.target.value);
-    console.log(event.target.value);
     setItems([]);
+  };
+
+  const handleSetValue = (stateUpdate, item) => {
+    let data = {
+      id: item.studentId,
+      enrollment: item.enrollment,
+      homeState: item.homeState,
+      belongGroup: item.belongGroup,
+      career: item.career,
+      state: stateUpdate,
+    };
+    updateApi(data);
+  };
+
+  const updateApi = (elem) => {
+    setShowLinearProgress(true);
     teacherService
-      .getAllStudentForCredentials(1, "", "")
-      .then((data) => {
-        console.log(data);
-        setItems(data);
+      .updateStudentForCredentials(elem)
+      .then(() => {
+        getApi();
+        setShowLinearProgress(false);
       })
       .catch((error) => {
         console.error(error);
@@ -81,9 +100,12 @@ export default function ManageStudentsTeacher() {
   };
 
   useEffect(() => {
-    let student = authenticationService.currentUserValue();
+    getApi();
+  }, []);
+
+  const getApi = (studentState = "all", section = "all") => {
     teacherService
-      .getAllStudentForCredentials(student.teacherId, "all", "all")
+      .getAllStudentForCredentials(teacher.teacherId, studentState, section)
       .then((data) => {
         setItems(data);
         console.log(data);
@@ -91,7 +113,7 @@ export default function ManageStudentsTeacher() {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  };
 
   const ShowData = () => {
     if (items[0])
@@ -135,27 +157,33 @@ export default function ManageStudentsTeacher() {
                   onFocus={(event) => event.stopPropagation()}
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
-                    width: "25%",
-                    marginLeft: "15%",
+                    justifyContent: "center",
+                    width: "300px",
                   }}
                 >
-                  <Button
-                    size="small"
-                    style={{ width: 80, height: 20 }}
-                    variant="contained"
-                    color="secondary"
-                  >
-                    Negar
-                  </Button>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    color="primary"
-                    style={{ width: 80, height: 20 }}
-                  >
-                    Aprobar
-                  </Button>
+                  {item.state !== "denied" && (
+                    <Button
+                      size="small"
+                      style={{ width: 80, height: 20, marginLeft: 5 }}
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleSetValue("denied", item)}
+                    >
+                      Negar
+                    </Button>
+                  )}
+
+                  {item.state !== "approved" && (
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="primary"
+                      style={{ width: 80, height: 20, marginLeft: 5 }}
+                      onClick={() => handleSetValue("approved", item)}
+                    >
+                      Aprobar
+                    </Button>
+                  )}
                 </Box>
               </Box>
             </AccordionSummary>
@@ -168,7 +196,7 @@ export default function ManageStudentsTeacher() {
           style={{
             display: "flex",
             justifyContent: "center",
-            width: 940,
+            width: 750,
             padding: 0,
           }}
         >
@@ -227,6 +255,10 @@ export default function ManageStudentsTeacher() {
         />
       </Paper>
       <div className={classes.root}>
+        <LinearProgress
+          className={classes.animate}
+          style={{ opacity: showLinearProgress ? 1 : 0 }}
+        />
         <ShowData></ShowData>
       </div>
     </Container>

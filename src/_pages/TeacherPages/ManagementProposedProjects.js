@@ -181,7 +181,7 @@ export default function ManagementProposedProjects() {
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
-                        width: "40%",
+
                         marginTop: "13px",
                       }}
                     >
@@ -190,7 +190,7 @@ export default function ManagementProposedProjects() {
                           {item.state !== "denied" && (
                             <Button
                               size="small"
-                              style={{ width: 60, height: 20 }}
+                              style={{ width: 60, height: 20, marginRight: 4 }}
                               variant="contained"
                               color="secondary"
                               onClick={() => handleStateProject("denied", item)}
@@ -206,7 +206,7 @@ export default function ManagementProposedProjects() {
                             <Button
                               size="small"
                               variant="contained"
-                              style={{ width: 73, height: 20 }}
+                              style={{ width: 73, height: 20, marginRight: 4 }}
                               onClick={() =>
                                 handleStateProject("potential", item)
                               }
@@ -221,7 +221,7 @@ export default function ManagementProposedProjects() {
                           {item.state !== "approved" && (
                             <Button
                               size="small"
-                              style={{ width: 73, height: 20 }}
+                              style={{ width: 73, height: 20, marginRight: 5 }}
                               variant="contained"
                               color="primary"
                               onClick={() =>

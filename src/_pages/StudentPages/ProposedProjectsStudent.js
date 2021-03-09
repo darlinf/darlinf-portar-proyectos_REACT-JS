@@ -23,7 +23,6 @@ export default function ProposedProjectsStudent(props) {
   };
   const [open, setOpen] = React.useState(false);
   const [state, setState] = useState(initalState);
-  const [status, setStatus] = useState(false);
 
   const handleChangeText = (value, name) => {
     setState({ ...state, [name]: value });
@@ -37,17 +36,12 @@ export default function ProposedProjectsStudent(props) {
     studentService
       .CreateProposedProject(state)
       .then((data) => {
-        console.log("dddddd");
-        setStatus(true);
+        setOpen(true);
+        setState(initalState);
       })
       .catch((error) => {
         console.error(error);
-        setStatus(true);
       });
-  };
-
-  const handleClick = () => {
-    setOpen(true);
   };
 
   const handleClose = (event, reason) => {
@@ -75,6 +69,7 @@ export default function ProposedProjectsStudent(props) {
             label="Nombre"
             style={{ marginBottom: 10 }}
             variant="filled"
+            value={state.name}
             onChange={(e) => {
               handleChangeText(e.target.value, "name");
             }}
@@ -86,6 +81,7 @@ export default function ProposedProjectsStudent(props) {
             rows={4}
             defaultValue=""
             variant="filled"
+            value={state.description}
             onChange={(e) => {
               handleChangeText(e.target.value, "description");
             }}
@@ -96,6 +92,7 @@ export default function ProposedProjectsStudent(props) {
             rows={4}
             defaultValue=""
             variant="filled"
+            value={state.justification}
             onChange={(e) => {
               handleChangeText(e.target.value, "justification");
             }}
@@ -112,13 +109,11 @@ export default function ProposedProjectsStudent(props) {
           </Box>
         </form>
       </Card>
-      {status && (
-        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity="error">
-            {status}
-          </Alert>
-        </Snackbar>
-      )}
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          Proyecto propuesto creado
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
