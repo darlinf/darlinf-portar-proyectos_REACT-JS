@@ -16,6 +16,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import "./style/styleFinalProyect.css";
 import { incognitoService } from "../../_services/incognito.service";
+import { Search } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,6 +60,7 @@ const ProposedProject = () => {
   const classes = useStyles();
   const [age, setAge] = React.useState("");
   const [items, setItems] = useState([]);
+  const [itemsCopy, setItemsCopy] = useState([]);
 
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -69,6 +71,7 @@ const ProposedProject = () => {
       .then((data) => {
         console.log(data);
         setItems(data);
+        setItemsCopy(data);
       })
       .catch((error) => {
         console.error(error);
@@ -80,11 +83,20 @@ const ProposedProject = () => {
       .getAllProposedProject()
       .then((data) => {
         setItems(data);
+        setItemsCopy(data);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
+
+  const searchTo = (value) => {
+    setItems(
+      itemsCopy.filter(
+        (el) => el.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
+      )
+    );
+  };
 
   const ShowData = () => {
     if (items[0])
@@ -171,8 +183,9 @@ const ProposedProject = () => {
         <Divider className={classes.divider} orientation="vertical" />
         <InputBase
           className={classes.input}
+          onChange={(e) => searchTo(e.target.value)}
           placeholder="Buscar"
-          inputProps={{ "aria-label": "search google maps" }}
+          inputProps={{ "aria-label": "Buscar" }}
         />
       </Paper>
       <Container

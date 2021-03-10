@@ -12,6 +12,7 @@ export const teacherService = {
   updateFinalProject,
   getAllChapterProject,
   updateChapterProject,
+  GetAllSection,
 };
 
 function getAllStudentForCredentials(TeacherId, estudentState, section) {
@@ -52,6 +53,18 @@ function getAllProjectForEvaluate(TeacherId, projectState, section) {
       return error;
     });
 }
+function GetAllSection(TeacherId) {
+  return axios
+    .get(`${apiUrl}Teacher/GetAllSection/${TeacherId}`, {
+      headers: authHeader(),
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error;
+    });
+}
 function updateProjectForEvaluate(proposedProject) {
   return axios
     .put(`${apiUrl}Teacher/updateProjectForEvaluate/`, proposedProject, {
@@ -64,10 +77,10 @@ function updateProjectForEvaluate(proposedProject) {
       return error;
     });
 }
-function getAllFinalProjectForEvaluate(TeacherId, projectState, section) {
+function getAllFinalProjectForEvaluate(TeacherId, section, projectState) {
   return axios
     .get(
-      `${apiUrl}Teacher/getAllFinalProjectForEvaluate/${TeacherId}/${projectState}/${section}`,
+      `${apiUrl}Teacher/getAllFinalProjectForEvaluate/${TeacherId}/${section}/${projectState}`,
       { headers: authHeader() }
     )
     .then((response) => {

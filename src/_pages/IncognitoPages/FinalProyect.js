@@ -68,6 +68,7 @@ const FinalProyect = () => {
   const classes = useStyles();
   const [items, setItems] = useState([]);
   const [age, setAge] = React.useState("");
+  const [itemsCopy, setItemsCopy] = useState([]);
 
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -76,8 +77,8 @@ const FinalProyect = () => {
     incognitoService
       .getAllFinalProjectByCareer(event.target.value)
       .then((data) => {
-        console.log(data);
         setItems(data);
+        setItemsCopy(data);
       })
       .catch((error) => {
         console.error(error);
@@ -89,13 +90,20 @@ const FinalProyect = () => {
       .getAllFinalProject()
       .then((data) => {
         setItems(data);
-
-        console.log(data);
+        setItemsCopy(data);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
+
+  const searchTo = (value) => {
+    setItems(
+      itemsCopy.filter(
+        (el) => el.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
+      )
+    );
+  };
 
   const ShowData = () => {
     if (items[0])
@@ -128,9 +136,14 @@ const FinalProyect = () => {
               }}
             >
               <Typography>Calificacion {item.examGrade}</Typography>
-              <Button size="small" color="primary">
-                Ver documentacion
-              </Button>
+              <a
+                target="blank"
+                href={"https://localhost:5001/" + item.finalDocumentationSRC}
+              >
+                <Button size="small" color="primary">
+                  Ver documentacion
+                </Button>
+              </a>
             </CardActions>
           </Card>
         );
@@ -177,7 +190,8 @@ const FinalProyect = () => {
         <InputBase
           className={classes.input}
           placeholder="Search Google Maps"
-          inputProps={{ "aria-label": "search google maps" }}
+          inputProps={{ "aria-label": "Buscar" }}
+          onChange={(e) => searchTo(e.target.value)}
         />
       </Paper>
       <Container

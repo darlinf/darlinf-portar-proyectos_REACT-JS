@@ -60,6 +60,7 @@ export default function ManagementProposedProjects() {
   const [expanded, setExpanded] = React.useState(false);
   const [items, setItems] = useState([]);
   const [showLinearProgress, setShowLinearProgress] = useState(false);
+  const [itemsCopy, setItemsCopy] = useState([]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -101,10 +102,7 @@ export default function ManagementProposedProjects() {
       .getAllProjectForEvaluate(1, "all", "all")
       .then((data) => {
         setItems(data);
-
-        var iii = authenticationService.currentUserValue();
-        console.log(iii);
-        console.log(data);
+        setItemsCopy(data);
       })
       .catch((error) => {
         console.error(error);
@@ -114,6 +112,14 @@ export default function ManagementProposedProjects() {
   useEffect(() => {
     getApi();
   }, []);
+
+  const searchTo = (value) => {
+    setItems(
+      itemsCopy.filter(
+        (el) => el.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
+      )
+    );
+  };
 
   const ShowData = () => {
     if (items[0])
@@ -341,8 +347,9 @@ export default function ManagementProposedProjects() {
         <Divider className={classes.divider} orientation="vertical" />
         <InputBase
           className={classes.input}
-          placeholder="Search Google Maps"
-          inputProps={{ "aria-label": "search google maps" }}
+          placeholder="Buscar proyecto"
+          inputProps={{ "aria-label": "Buscar proyecto" }}
+          onChange={(e) => searchTo(e.target.value)}
         />
       </Paper>
       <div className={classes.root}>

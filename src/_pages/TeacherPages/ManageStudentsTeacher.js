@@ -63,6 +63,7 @@ export default function ManageStudentsTeacher() {
   const [expanded, setExpanded] = React.useState(false);
   const [items, setItems] = useState([]);
   const [showLinearProgress, setShowLinearProgress] = useState(false);
+  const [itemsCopy, setItemsCopy] = useState([]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -108,11 +109,19 @@ export default function ManageStudentsTeacher() {
       .getAllStudentForCredentials(teacher.teacherId, studentState, section)
       .then((data) => {
         setItems(data);
-        console.log(data);
+        setItemsCopy(data);
       })
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const searchTo = (value) => {
+    setItems(
+      itemsCopy.filter(
+        (el) => el.enrollment.toLowerCase().indexOf(value.toLowerCase()) !== -1
+      )
+    );
   };
 
   const ShowData = () => {
@@ -251,7 +260,8 @@ export default function ManageStudentsTeacher() {
         <InputBase
           className={classes.input}
           placeholder="Buscar por matricula"
-          inputProps={{ "aria-label": "search google maps" }}
+          inputProps={{ "aria-label": "Buscar" }}
+          onChange={(e) => searchTo(e.target.value)}
         />
       </Paper>
       <div className={classes.root}>

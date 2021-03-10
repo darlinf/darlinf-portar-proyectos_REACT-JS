@@ -143,17 +143,25 @@ export default function ManageFinalProjectsTeacher() {
 
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-
   const [items, setItems] = useState([]);
   const [showLinearProgress, setShowLinearProgress] = useState(false);
+  const [itemsCopy, setItemsCopy] = useState([]);
+  const [sections, setSections] = useState([]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-  const [age, setAge] = React.useState("");
+  const [ageSection, setAgeSection] = React.useState("");
+  const [ageState, setAgeState] = React.useState("");
 
-  const handleChange2 = (event) => {
-    setAge(event.target.value);
+  const handleChangeSection = (event) => {
+    setAgeSection(event.target.value);
+    console.log(event.target.value); //////////////////////////////////////////
+    getApi(event.target.value, "all");
+  };
+
+  const handleChangeState = (event) => {
+    setAgeState(event.target.value);
   };
 
   const updateApi = (elem) => {
@@ -169,13 +177,24 @@ export default function ManageFinalProjectsTeacher() {
       });
   };
 
-  const getApi = () => {
+  const getApi = (section = "all", state = "all") => {
     teacherService
-      .getAllFinalProjectForEvaluate(1, "all", "all")
+      .getAllFinalProjectForEvaluate(teacher.teacherId, section, state)
       .then((data) => {
         setItems(data);
+        setItemsCopy(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
+  const getApiSection = () => {
+    teacherService
+      .GetAllSection(teacher.teacherId)
+      .then((data) => {
         console.log(data);
+        setSections(data);
       })
       .catch((error) => {
         console.error(error);
@@ -183,8 +202,17 @@ export default function ManageFinalProjectsTeacher() {
   };
 
   useEffect(() => {
+    getApiSection();
     getApi();
   }, []);
+
+  const searchTo = (value) => {
+    setItems(
+      itemsCopy.filter(
+        (el) => el.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
+      )
+    );
+  };
 
   const ShowData = () => {
     if (items[0])
@@ -354,13 +382,14 @@ export default function ManageFinalProjectsTeacher() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={age}
-            onChange={handleChange2}
+            value={ageState}
+            onChange={handleChangeState}
             style={{ border: "none", width: 200 }}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            <MenuItem value="evaluate">Evaluar</MenuItem>
+            <MenuItem value="approved">Aprovado</MenuItem>
+            <MenuItem value="potential">Potenciar</MenuItem>
+            <MenuItem value="denied">Negado</MenuItem>
           </Select>
         </FormControl>
 
@@ -371,21 +400,22 @@ export default function ManageFinalProjectsTeacher() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={age}
-            onChange={handleChange2}
+            value={ageSection}
+            onChange={handleChangeSection}
             style={{ border: "none", width: 200 }}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {sections.map((x) => (
+              <MenuItem value={x.sectionNumber}>{x.sectionNumber}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
         <Divider className={classes.divider} orientation="vertical" />
         <InputBase
           className={classes.input}
-          placeholder="Buscar por matricula"
-          inputProps={{ "aria-label": "search google maps" }}
+          placeholder="Buscar proyecto"
+          inputProps={{ "aria-label": "Buscar proyecto" }}
+          onChange={(e) => searchTo(e.target.value)}
         />
       </Paper>
       <div className={classes.root}>
