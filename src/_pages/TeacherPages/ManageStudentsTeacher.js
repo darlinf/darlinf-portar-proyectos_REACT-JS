@@ -64,15 +64,25 @@ export default function ManageStudentsTeacher() {
   const [items, setItems] = useState([]);
   const [showLinearProgress, setShowLinearProgress] = useState(false);
   const [itemsCopy, setItemsCopy] = useState([]);
-
+  const [sections, setSections] = useState([]);
+  const [ageSection, setAgeSection] = React.useState("");
+  const [ageState, setAgeState] = React.useState("");
+  let sectionG = "all",
+    stateG = "all";
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-  const [age, setAge] = React.useState("");
 
-  const handleChange2 = (event) => {
-    setAge(event.target.value);
-    setItems([]);
+  const handleChangeSection = (event) => {
+    setAgeSection(event.target.value);
+    sectionG = event.target.value;
+    getApi(sectionG, stateG);
+  };
+
+  const handleChangeState = (event) => {
+    setAgeState(event.target.value);
+    stateG = event.target.value;
+    getApi(sectionG, stateG);
   };
 
   const handleSetValue = (stateUpdate, item) => {
@@ -100,13 +110,26 @@ export default function ManageStudentsTeacher() {
       });
   };
 
+  const getApiSection = () => {
+    teacherService
+      .GetAllSection(teacher.teacherId)
+      .then((data) => {
+        console.log(data);
+        setSections(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   useEffect(() => {
+    getApiSection();
     getApi();
   }, []);
 
   const getApi = (studentState = "all", section = "all") => {
     teacherService
-      .getAllStudentForCredentials(teacher.teacherId, studentState, section)
+      .getAllStudentForCredentials(teacher.teacherId, section, studentState)
       .then((data) => {
         setItems(data);
         setItemsCopy(data);
@@ -229,30 +252,30 @@ export default function ManageStudentsTeacher() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={age}
-            onChange={handleChange2}
+            value={ageState}
+            onChange={handleChangeState}
             style={{ border: "none", width: 200 }}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            <MenuItem value="evaluate">Evaluar</MenuItem>
+            <MenuItem value="approved">Aprobado</MenuItem>
+            <MenuItem value="denied">Negado</MenuItem>
           </Select>
         </FormControl>
 
         <FormControl className={classes.formControl}>
           <InputLabel id="demo-simple-select-label">
-            Seleccionar por seccion
+            Seleccionar por sección
           </InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={age}
-            onChange={handleChange2}
+            value={ageSection}
+            onChange={handleChangeSection}
             style={{ border: "none", width: 200 }}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {sections.map((x) => (
+              <MenuItem value={x.sectionNumber}>{x.sectionNumber}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -260,7 +283,7 @@ export default function ManageStudentsTeacher() {
         <InputBase
           className={classes.input}
           placeholder="Buscar por matricula"
-          inputProps={{ "aria-label": "Buscar" }}
+          inputProps={{ "aria-label": "Buscar por matricula" }}
           onChange={(e) => searchTo(e.target.value)}
         />
       </Paper>

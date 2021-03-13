@@ -14,10 +14,10 @@ export default function Home() {
         style={{ paddingTop: 30, paddingBottom: 30, borderRadius: 30 }}
       >
         <Typography style={{ fontSize: 40, textAlign: "center" }}>
-          Bienvenido al portar
+          Bienvenido al portal
         </Typography>
         <Typography style={{ fontSize: 40, textAlign: "center" }}>
-          proyecto ITSC
+          proyectos ITSC
         </Typography>
         <Container
           style={{

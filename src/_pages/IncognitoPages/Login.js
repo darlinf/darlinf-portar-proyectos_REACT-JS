@@ -47,7 +47,7 @@ export default function Login(props) {
               marginBottom: "10px",
             }}
           >
-            Inicial seccion
+            Iniciar sesión
           </Typography>
           <Formik
             initialValues={{
@@ -128,7 +128,7 @@ export default function Login(props) {
                       className="btn btn-primary"
                       disabled={isSubmitting}
                     >
-                      Inicial seccion
+                      Iniciar sesión
                     </button>
                   </div>
                 </Container>

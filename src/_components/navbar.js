@@ -60,7 +60,7 @@ export default function Navbar(props) {
                     to="/homeAdmin"
                     style={{ color: "#FFFFFF", textDecoration: "none" }}
                   >
-                    Portar proyectos ITSC
+                    Portal proyectos ITSC
                   </Link>
                 )}
                 {user.role === "Student" && (
@@ -68,7 +68,7 @@ export default function Navbar(props) {
                     to="/homeStudent"
                     style={{ color: "#FFFFFF", textDecoration: "none" }}
                   >
-                    Portar proyectos ITSC
+                    Portal proyectos ITSC
                   </Link>
                 )}
                 {user.role === "Teacher" && (
@@ -76,14 +76,14 @@ export default function Navbar(props) {
                     to="/homeTeacher"
                     style={{ color: "#FFFFFF", textDecoration: "none" }}
                   >
-                    Portar proyectos ITSC
+                    Portal proyectos ITSC
                   </Link>
                 )}
               </div>
             )}
             {!user && (
               <Link to="/" style={{ color: "#FFFFFF", textDecoration: "none" }}>
-                Portar proyectos ITSC
+                Portal proyectos ITSC
               </Link>
             )}
           </Typography>
@@ -104,7 +104,7 @@ export default function Navbar(props) {
                       to="/managementProposedProjects"
                       style={{ color: "white", textDecoration: "none" }}
                     >
-                      Propuesto
+                      Propuestos
                     </Link>
                   </Button>
 
@@ -153,7 +153,7 @@ export default function Navbar(props) {
                       to="/ProposedProjectsShowStudent"
                       style={{ color: "white", textDecoration: "none" }}
                     >
-                      propuestos
+                      Propuestos
                     </Link>
                   </Button>
                 </div>
@@ -195,9 +195,8 @@ export default function Navbar(props) {
                     authenticationService.logout();
                   }}
                 >
-                  Cerrar seccion
+                  Cerrar sesión
                 </MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
             </div>
           )}

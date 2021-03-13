@@ -135,13 +135,13 @@ const FinalProyect = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Typography>Calificacion {item.examGrade}</Typography>
+              <Typography>Calificación {item.examGrade}</Typography>
               <a
                 target="blank"
                 href={"https://localhost:5001/" + item.finalDocumentationSRC}
               >
                 <Button size="small" color="primary">
-                  Ver documentacion
+                  Ver documentación
                 </Button>
               </a>
             </CardActions>
@@ -168,7 +168,7 @@ const FinalProyect = () => {
       <Typography
         style={{ textAlign: "center", marginBottom: "10px", fontSize: 40 }}
       >
-        Proyecto finales
+        Proyectos finales
       </Typography>
       <Paper component="form" className={classes.root}>
         <FormControl className={classes.formControl}>
@@ -189,7 +189,7 @@ const FinalProyect = () => {
         <Divider className={classes.divider} orientation="vertical" />
         <InputBase
           className={classes.input}
-          placeholder="Search Google Maps"
+          placeholder="Buscar"
           inputProps={{ "aria-label": "Buscar" }}
           onChange={(e) => searchTo(e.target.value)}
         />

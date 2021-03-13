@@ -153,15 +153,20 @@ export default function ManageFinalProjectsTeacher() {
   };
   const [ageSection, setAgeSection] = React.useState("");
   const [ageState, setAgeState] = React.useState("");
+  let sectionG = "all",
+    stateG = "all";
 
   const handleChangeSection = (event) => {
     setAgeSection(event.target.value);
-    console.log(event.target.value); //////////////////////////////////////////
-    getApi(event.target.value, "all");
+    console.log(event.target.value);
+    sectionG = event.target.value;
+    getApi(sectionG, stateG);
   };
 
   const handleChangeState = (event) => {
     setAgeState(event.target.value);
+    stateG = event.target.value;
+    getApi(sectionG, stateG);
   };
 
   const updateApi = (elem) => {
@@ -293,7 +298,7 @@ export default function ManageFinalProjectsTeacher() {
                             handleSetValue(null, "denied", item);
                           }}
                         >
-                          Reeprobar
+                          Reprobar
                         </Button>
                       )}
 
@@ -387,15 +392,14 @@ export default function ManageFinalProjectsTeacher() {
             style={{ border: "none", width: 200 }}
           >
             <MenuItem value="evaluate">Evaluar</MenuItem>
-            <MenuItem value="approved">Aprovado</MenuItem>
-            <MenuItem value="potential">Potenciar</MenuItem>
+            <MenuItem value="approved">Aprobado</MenuItem>
             <MenuItem value="denied">Negado</MenuItem>
           </Select>
         </FormControl>
 
         <FormControl className={classes.formControl}>
           <InputLabel id="demo-simple-select-label">
-            Seleccionar por seccion
+            Seleccionar por sección
           </InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -413,8 +417,8 @@ export default function ManageFinalProjectsTeacher() {
         <Divider className={classes.divider} orientation="vertical" />
         <InputBase
           className={classes.input}
-          placeholder="Buscar proyecto"
-          inputProps={{ "aria-label": "Buscar proyecto" }}
+          placeholder="Buscar proyectos"
+          inputProps={{ "aria-label": "Buscar proyectos" }}
           onChange={(e) => searchTo(e.target.value)}
         />
       </Paper>

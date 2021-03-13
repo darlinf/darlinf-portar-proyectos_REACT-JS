@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import InputBase from "@material-ui/core/InputBase";
-import Divider from "@material-ui/core/Divider";
 import { Container } from "@material-ui/core";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
@@ -19,59 +11,13 @@ import { Link } from "react-router-dom";
 
 import { studentService } from "../../_services/student.service";
 import { authenticationService } from "../../_services/authentication.service";
-//import "./style/styleFinalProyect.css";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: "2px 4px",
-    display: "flex",
-    alignItems: "center",
-    width: 940,
-    margin: "auto",
-    marginBottom: "10px",
-  },
-  input: {
-    marginLeft: theme.spacing(1),
-    flex: 1,
-  },
-  iconButton: {
-    padding: 10,
-  },
-  divider: {
-    height: 28,
-    margin: 4,
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-  rootCard: {
-    marginLeft: "5px",
-    marginRight: "5px",
-    marginBottom: "10px",
-    width: "50%",
-  },
-  media: {
-    height: 160,
-  },
-}));
 
 const ProposedProjectsShowStudent = () => {
-  const classes = useStyles();
   const [items, setItems] = useState([]);
   const [proposedProjectState, setProposedProjectState] = useState(false);
   const [studentId] = useState(
     authenticationService.currentUserValue().studentId
   );
-
-  const [age, setAge] = React.useState("");
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
 
   console.log(studentId);
 
@@ -107,7 +53,7 @@ const ProposedProjectsShowStudent = () => {
               </Typography>
               <Box style={{ display: "flex" }}>
                 <Box style={{ width: "50%" }}>
-                  <Typography>Descricion</Typography>
+                  <Typography>Descripción</Typography>
                   <Typography
                     className="lizardsStyle"
                     style={{ overflowY: "scroll", height: 100 }}
@@ -119,7 +65,7 @@ const ProposedProjectsShowStudent = () => {
                   </Typography>
                 </Box>
                 <Box style={{ width: "50%", marginLeft: 20 }}>
-                  <Typography>Justificacion</Typography>
+                  <Typography>Justificación</Typography>
                   <Typography
                     className="lizardsStyle"
                     style={{ overflowY: "scroll", height: 100 }}
@@ -194,7 +140,7 @@ const ProposedProjectsShowStudent = () => {
       <Typography
         style={{ textAlign: "center", marginBottom: "20px", fontSize: 40 }}
       >
-        Proyecto propuestos
+        Proyectos propuestos
       </Typography>
       <Container
         style={{

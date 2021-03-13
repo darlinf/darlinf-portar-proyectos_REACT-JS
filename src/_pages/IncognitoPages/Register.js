@@ -7,6 +7,11 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { authenticationService } from "../../_services/authentication.service";
 import Typography from "@material-ui/core/Typography";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -44,6 +49,17 @@ function InputCustoms({ errors, touched, name, keyObj, type = "text" }) {
 export default function Login(props) {
   const classes = styles();
   const [open, setOpen] = React.useState(false);
+
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    props.history.push({ pathname: "/" });
+    setOpenDialog(false);
+  };
 
   const handleClick = () => {
     setOpen(true);
@@ -93,10 +109,7 @@ export default function Login(props) {
               setStatus();
               authenticationService.register(initialValues).then(
                 (response) => {
-                  const { from } = props.location.state || {
-                    from: { pathname: "/registerSuccess" },
-                  };
-                  props.history.push(from);
+                  handleClickOpenDialog();
                   console.log(response);
                 },
                 (error) => {
@@ -133,7 +146,7 @@ export default function Login(props) {
                   errors={errors}
                   touched={touched}
                   keyObj="MatterCode"
-                  name="Codigo de materia"
+                  name="Código de materia"
                 />
 
                 <InputCustoms
@@ -204,6 +217,29 @@ export default function Login(props) {
           />
         </div>
       </Card>
+      <div>
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"¡Registro éxito!"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Solicitud de registro hecha exitosamente. Tu maestro será
+              notificado y el habilitará tu acceso.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary" autoFocus>
+              Aceptar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </Container>
   );
 }

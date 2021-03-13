@@ -92,7 +92,7 @@ export default function MenuNav() {
                         to="/Login"
                         style={{ color: "black", textDecoration: "none" }}
                       >
-                        Iniciar seccion
+                        Iniciar sesión
                       </Link>
                     </MenuItem>
                     <MenuItem onClick={handleClose}>

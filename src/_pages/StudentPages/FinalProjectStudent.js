@@ -107,7 +107,7 @@ export default function FinalProjectStudent({ match: { params } }) {
   return (
     <div>
       <Typography style={{ textAlign: "center", marginTop: 50, fontSize: 30 }}>
-        Completar informacion del proyecto final:
+        Completar información del proyecto final:
       </Typography>
       <Typography
         style={{ textAlign: "center", fontSize: 30, fontWeight: "500" }}
@@ -130,7 +130,7 @@ export default function FinalProjectStudent({ match: { params } }) {
               name="myImage"
               onChange={onChange}
             />
-            <h1 className={classes.magi}>Documentacion final</h1>
+            <h1 className={classes.magi}>Documentación final</h1>
             <input
               className="btn btn-light"
               type="file"

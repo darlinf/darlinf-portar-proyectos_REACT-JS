@@ -114,7 +114,7 @@ const ProposedProject = () => {
               </Typography>
               <Box style={{ display: "flex" }}>
                 <Box style={{ width: "50%" }}>
-                  <Typography>Descricion</Typography>
+                  <Typography>Descripción</Typography>
                   <Typography
                     className="lizardsStyle"
                     style={{ overflowY: "scroll", height: 100 }}
@@ -126,7 +126,7 @@ const ProposedProject = () => {
                   </Typography>
                 </Box>
                 <Box style={{ marginLeft: 20, width: "50%" }}>
-                  <Typography>Justificacion</Typography>
+                  <Typography>Justificación</Typography>
                   <Typography
                     className="lizardsStyle"
                     style={{ overflowY: "scroll", height: 100 }}
@@ -162,7 +162,7 @@ const ProposedProject = () => {
       <Typography
         style={{ textAlign: "center", marginBottom: "10px", fontSize: 40 }}
       >
-        Proyecto propuestos
+        Proyectos propuestos
       </Typography>
       <Paper component="form" className={classes.root}>
         <FormControl className={classes.formControl}>

@@ -20,6 +20,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { teacherService } from "../../_services/teacher.service";
 import { authenticationService } from "../../_services/authentication.service";
 
+const teacher = authenticationService.currentUserValue();
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -61,14 +63,26 @@ export default function ManagementProposedProjects() {
   const [items, setItems] = useState([]);
   const [showLinearProgress, setShowLinearProgress] = useState(false);
   const [itemsCopy, setItemsCopy] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [ageSection, setAgeSection] = React.useState("");
+  const [ageState, setAgeState] = React.useState("");
+  let sectionG = "all",
+    stateG = "all";
+
+  const handleChangeSection = (event) => {
+    setAgeSection(event.target.value);
+    sectionG = event.target.value;
+    getApi(sectionG, stateG);
+  };
+
+  const handleChangeState = (event) => {
+    setAgeState(event.target.value);
+    stateG = event.target.value;
+    getApi(sectionG, stateG);
+  };
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
-  };
-  const [age, setAge] = React.useState("");
-
-  const handleChange2 = (event) => {
-    setAge(event.target.value);
   };
 
   const handleStateProject = (state, item) => {
@@ -97,9 +111,9 @@ export default function ManagementProposedProjects() {
       });
   };
 
-  const getApi = () => {
+  const getApi = (section = "all", state = "all") => {
     teacherService
-      .getAllProjectForEvaluate(1, "all", "all")
+      .getAllProjectForEvaluate(teacher.teacherId, section, state)
       .then((data) => {
         setItems(data);
         setItemsCopy(data);
@@ -109,10 +123,6 @@ export default function ManagementProposedProjects() {
       });
   };
 
-  useEffect(() => {
-    getApi();
-  }, []);
-
   const searchTo = (value) => {
     setItems(
       itemsCopy.filter(
@@ -120,6 +130,23 @@ export default function ManagementProposedProjects() {
       )
     );
   };
+
+  const getApiSection = () => {
+    teacherService
+      .GetAllSection(teacher.teacherId)
+      .then((data) => {
+        console.log(data);
+        setSections(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    getApiSection();
+    getApi();
+  }, []);
 
   const ShowData = () => {
     if (items[0])
@@ -248,7 +275,7 @@ export default function ManagementProposedProjects() {
                   <Box>
                     <Box style={{ display: "flex" }}>
                       <Box style={{ width: "325px" }}>
-                        <Typography>Descricion</Typography>
+                        <Typography>Descripción</Typography>
                         <Typography
                           className="lizardsStyle"
                           style={{
@@ -264,7 +291,7 @@ export default function ManagementProposedProjects() {
                         </Typography>
                       </Box>
                       <Box style={{ marginLeft: 20, width: "325px" }}>
-                        <Typography>Justificacion</Typography>
+                        <Typography>Justificación</Typography>
                         <Typography
                           className="lizardsStyle"
                           style={{
@@ -317,30 +344,31 @@ export default function ManagementProposedProjects() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={age}
-            onChange={handleChange2}
+            value={ageState}
+            onChange={handleChangeState}
             style={{ border: "none", width: 200 }}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            <MenuItem value="evaluate">Evaluar</MenuItem>
+            <MenuItem value="approved">Aprobado</MenuItem>
+            <MenuItem value="potential">Potenciar</MenuItem>
+            <MenuItem value="denied">Negado</MenuItem>
           </Select>
         </FormControl>
 
         <FormControl className={classes.formControl}>
           <InputLabel id="demo-simple-select-label">
-            Seleccionar por seccion
+            Seleccionar por sección
           </InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={age}
-            onChange={handleChange2}
+            value={ageSection}
+            onChange={handleChangeSection}
             style={{ border: "none", width: 200 }}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {sections.map((x) => (
+              <MenuItem value={x.sectionNumber}>{x.sectionNumber}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 

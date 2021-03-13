@@ -87,7 +87,7 @@ export default function ProposedProjectsStudent(props) {
             }}
           />{" "}
           <TextField
-            label="Justificacion"
+            label="Justificación"
             multiline
             rows={4}
             defaultValue=""

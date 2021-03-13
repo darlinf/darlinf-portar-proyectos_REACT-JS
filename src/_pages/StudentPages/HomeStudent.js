@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Card, Container, Button } from "@material-ui/core";
+import React, { useState } from "react";
+import { Container, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import { authenticationService } from "../../_services/authentication.service";
+var user = authenticationService.currentUserValue();
 
 export default function HomeStudent() {
-  const [items, setItems] = useState({});
-
-  useEffect(() => {
-    var user = authenticationService.currentUserValue();
-    setItems(user);
-    console.log(items);
-  });
+  const [items] = useState(user);
 
   return (
     <Container style={{ marginTop: 150 }}>
@@ -19,7 +14,7 @@ export default function HomeStudent() {
         ¡Hola {items.name}!
       </Typography>
       <Typography style={{ textAlign: "center", fontSize: 30 }}>
-        Te damos la bienvenida al portar proyectos ITSC.
+        Te damos la bienvenida al portal proyectos ITSC.
       </Typography>
       <Typography style={{ textAlign: "center", marginTop: 10 }}>
         <Button style={{ margin: "auto" }} variant="outlined" color="primary">
