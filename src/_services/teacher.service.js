@@ -13,6 +13,7 @@ export const teacherService = {
   getAllChapterProject,
   updateChapterProject,
   GetAllSection,
+  updateUserForFinalProject,
 };
 
 function getAllStudentForCredentials(TeacherId, estudentState, section) {
@@ -93,6 +94,18 @@ function getAllFinalProjectForEvaluate(TeacherId, section, projectState) {
 function updateFinalProject(finalProject) {
   return axios
     .put(`${apiUrl}Teacher/updateFinalProject/`, finalProject, {
+      headers: authHeader(),
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error;
+    });
+}
+function updateUserForFinalProject(id, homeState) {
+  return axios
+    .get(`${apiUrl}Teacher/updateUserForFinalProject/${id}/${homeState}`, {
       headers: authHeader(),
     })
     .then((response) => {

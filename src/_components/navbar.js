@@ -13,6 +13,9 @@ import { useHistory } from "react-router-dom";
 
 import { authenticationService } from "../_services/authentication.service";
 import MenuNav from "./MenuNav";
+import { studentService } from "../_services/student.service";
+
+const student = authenticationService.currentUserValue();
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,10 +43,13 @@ export default function Navbar(props) {
   };
 
   const [user, setUser] = useState({});
+  const [proposedProject, setProposedProject] = useState(null);
 
   useEffect(() => {
     authenticationService.currentUser.subscribe((x) => {
       setUser(x);
+      console.log(x);
+      if (x) if (x.homeState) setProposedProject(x.homeState);
     });
   }, []);
 
@@ -140,6 +146,24 @@ export default function Navbar(props) {
               )}
               {user.role === "Student" && (
                 <div>
+                  <Button>
+                    {proposedProject !== "completed" && (
+                      <Link
+                        to={"/finalProjectStudent/" + proposedProject}
+                        style={{ color: "white", textDecoration: "none" }}
+                      >
+                        Final
+                      </Link>
+                    )}
+                    {proposedProject === "completed" && (
+                      <Link
+                        to={"/finalProjectCompletedStudent"}
+                        style={{ color: "white", textDecoration: "none" }}
+                      >
+                        Final
+                      </Link>
+                    )}
+                  </Button>
                   <Button>
                     <Link
                       to="/proposedProjectsStudent"

@@ -8,6 +8,7 @@ import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import { makeStyles } from "@material-ui/core/styles";
 import { authenticationService } from "../../_services/authentication.service";
 import { studentService } from "../../_services/student.service";
+import { teacherService } from "../../_services/teacher.service";
 
 const axios = require("axios");
 const student = authenticationService.currentUserValue();
@@ -100,6 +101,14 @@ export default function FinalProjectStudent({ match: { params } }) {
       .createFinalProject(data)
       .then((response) => {
         console.log(response);
+        studentService
+          .updateUserForFinalProject(student.studentId, "completed")
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {});
   };

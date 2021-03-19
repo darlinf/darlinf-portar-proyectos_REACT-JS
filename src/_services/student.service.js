@@ -12,6 +12,7 @@ export const studentService = {
   CreateChapterProject,
   GetAllChapterProject,
   createFinalProject,
+  updateUserForFinalProject,
 };
 
 function CreateProposedProject(proposedProject) {
@@ -30,6 +31,18 @@ function CreateProposedProject(proposedProject) {
 function GetProposedProject(StudentId) {
   return axios
     .get(`${apiUrl}Student/GetProposedProject/${StudentId}`, {
+      headers: authHeader(),
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error;
+    });
+}
+function updateUserForFinalProject(id, homeState) {
+  return axios
+    .get(`${apiUrl}Student/updateUserForFinalProject/${id}/${homeState}`, {
       headers: authHeader(),
     })
     .then((response) => {

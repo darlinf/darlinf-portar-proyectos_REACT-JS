@@ -20,8 +20,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { teacherService } from "../../_services/teacher.service";
 import { authenticationService } from "../../_services/authentication.service";
 
-const teacher = authenticationService.currentUserValue();
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -68,6 +66,7 @@ export default function ManagementProposedProjects() {
   const [ageState, setAgeState] = React.useState("");
   let sectionG = "all",
     stateG = "all";
+  const teacher = authenticationService.currentUserValue();
 
   const handleChangeSection = (event) => {
     setAgeSection(event.target.value);
@@ -95,6 +94,18 @@ export default function ManagementProposedProjects() {
       state: state,
       studentId: item.studentId,
     };
+    console.log(state);
+    if (state === "approved") {
+      console.log(state);
+      teacherService
+        .updateUserForFinalProject(item.studentId, item.name)
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
     updateApi(itemUpdate);
   };
 
@@ -367,7 +378,9 @@ export default function ManagementProposedProjects() {
             style={{ border: "none", width: 200 }}
           >
             {sections.map((x) => (
-              <MenuItem value={x.sectionNumber}>{x.sectionNumber}</MenuItem>
+              <MenuItem key={x.id} value={x.sectionNumber}>
+                {x.sectionNumber}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>

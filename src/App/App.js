@@ -28,6 +28,7 @@ import FinalProjectStudent from "../_pages/StudentPages/FinalProjectStudent";
 import ProjectChapterStudent from "../_pages/StudentPages/ProjectChapterStudent";
 import ProposedProjectsShowStudent from "../_pages/StudentPages/ProposedProjectsShowStudent";
 import ProjectChapterShowStudent from "../_pages/StudentPages/ProjectChapterShowStudent";
+import FinalProjectCompletedStudent from "../_pages/StudentPages/FinalProjectCompletedStudent";
 
 function App() {
   return (
@@ -84,6 +85,10 @@ function App() {
           <Route
             path="/projectChapterShowStudent"
             component={ProjectChapterShowStudent}
+          ></Route>
+          <Route
+            path="/finalProjectCompletedStudent"
+            component={FinalProjectCompletedStudent}
           ></Route>
         </Switch>
       </main>

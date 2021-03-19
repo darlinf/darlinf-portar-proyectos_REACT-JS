@@ -20,8 +20,6 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import { teacherService } from "../../_services/teacher.service";
 import { authenticationService } from "../../_services/authentication.service";
 
-let teacher = authenticationService.currentUserValue();
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -69,6 +67,8 @@ export default function ManageStudentsTeacher() {
   const [ageState, setAgeState] = React.useState("");
   let sectionG = "all",
     stateG = "all";
+  const teacher = authenticationService.currentUserValue();
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };

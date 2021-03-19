@@ -24,8 +24,6 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import { teacherService } from "../../_services/teacher.service";
 import { authenticationService } from "../../_services/authentication.service";
 
-const teacher = authenticationService.currentUserValue();
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -147,6 +145,7 @@ export default function ManageFinalProjectsTeacher() {
   const [showLinearProgress, setShowLinearProgress] = useState(false);
   const [itemsCopy, setItemsCopy] = useState([]);
   const [sections, setSections] = useState([]);
+  let dataEmpty = true;
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -155,6 +154,7 @@ export default function ManageFinalProjectsTeacher() {
   const [ageState, setAgeState] = React.useState("");
   let sectionG = "all",
     stateG = "all";
+  const teacher = authenticationService.currentUserValue();
 
   const handleChangeSection = (event) => {
     setAgeSection(event.target.value);
@@ -188,6 +188,8 @@ export default function ManageFinalProjectsTeacher() {
       .then((data) => {
         setItems(data);
         setItemsCopy(data);
+        /* if (data) dataEmpty = true;
+        if (!data) dataEmpty = false;*/
       })
       .catch((error) => {
         console.error(error);
@@ -220,156 +222,161 @@ export default function ManageFinalProjectsTeacher() {
   };
 
   const ShowData = () => {
-    if (items[0])
-      return items.map((item) => {
-        return (
-          <div key={item.studentId}>
-            <Accordion
-              expanded={expanded === "panel1" + item.studentId}
-              onChange={handleChange("panel1" + item.studentId)}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
+    if (!dataEmpty)
+      if (items[0])
+        return items.map((item) => {
+          return (
+            <div key={item.studentId}>
+              <Accordion
+                expanded={expanded === "panel1" + item.studentId}
+                onChange={handleChange("panel1" + item.studentId)}
               >
-                <Box
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100%",
-                  }}
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1bh-content"
+                  id="panel1bh-header"
                 >
                   <Box
                     style={{
                       display: "flex",
-                      justifyContent: "space-between",
+                      flexDirection: "column",
                       width: "100%",
                     }}
                   >
-                    <Typography>
-                      Estudiante:{" "}
-                      <Typography
-                        component="span"
-                        style={{ fontWeight: "bold" }}
-                      >
-                        {item.studenName}
-                      </Typography>
-                    </Typography>
-                    <Typography>
-                      Matricula:{" "}
-                      <Typography
-                        component="span"
-                        style={{ fontWeight: "bold" }}
-                      >
-                        {item.enrollment}
-                      </Typography>
-                    </Typography>
-                    <Typography>
-                      Proyecto:{" "}
-                      <Typography
-                        component="span"
-                        style={{ fontWeight: "bold" }}
-                      >
-                        {item.name}
-                      </Typography>
-                    </Typography>
-                  </Box>
-                  <Box
-                    onClick={(event) => event.stopPropagation()}
-                    onFocus={(event) => event.stopPropagation()}
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <Box></Box>
                     <Box
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
-                        marginTop: "13px",
+                        width: "100%",
                       }}
                     >
-                      {item.state !== "denied" && (
-                        <Button
-                          size="small"
-                          style={{ width: 85, height: 20, marginRight: 4 }}
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => {
-                            handleSetValue(null, "denied", item);
-                          }}
+                      <Typography>
+                        Estudiante:{" "}
+                        <Typography
+                          component="span"
+                          style={{ fontWeight: "bold" }}
                         >
-                          Reprobar
-                        </Button>
-                      )}
+                          {item.studenName}
+                        </Typography>
+                      </Typography>
+                      <Typography>
+                        Matricula:{" "}
+                        <Typography
+                          component="span"
+                          style={{ fontWeight: "bold" }}
+                        >
+                          {item.enrollment}
+                        </Typography>
+                      </Typography>
+                      <Typography>
+                        Proyecto:{" "}
+                        <Typography
+                          component="span"
+                          style={{ fontWeight: "bold" }}
+                        >
+                          {item.name}
+                        </Typography>
+                      </Typography>
+                    </Box>
+                    <Box
+                      onClick={(event) => event.stopPropagation()}
+                      onFocus={(event) => event.stopPropagation()}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Box></Box>
+                      <Box
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          marginTop: "13px",
+                        }}
+                      >
+                        {item.state !== "denied" && (
+                          <Button
+                            size="small"
+                            style={{ width: 85, height: 20, marginRight: 4 }}
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => {
+                              handleSetValue(null, "denied", item);
+                            }}
+                          >
+                            Reprobar
+                          </Button>
+                        )}
 
-                      {item.state !== "approved and not" && (
-                        <SimpleMenu
-                          name="Aprobar sin publicar"
-                          color=""
-                          elem={item}
-                          styles={{ width: 180, height: 20, marginRight: 4 }}
-                        ></SimpleMenu>
-                      )}
+                        {item.state !== "approved and not" && (
+                          <SimpleMenu
+                            name="Aprobar sin publicar"
+                            color=""
+                            elem={item}
+                            styles={{ width: 180, height: 20, marginRight: 4 }}
+                          ></SimpleMenu>
+                        )}
 
-                      {item.state !== "approved" && (
-                        <SimpleMenu
-                          name="Aprobar"
-                          color="primary"
-                          elem={item}
-                          styles={{ width: 73, height: 20, marginRight: 4 }}
-                        ></SimpleMenu>
-                      )}
+                        {item.state !== "approved" && (
+                          <SimpleMenu
+                            name="Aprobar"
+                            color="primary"
+                            elem={item}
+                            styles={{ width: 73, height: 20, marginRight: 4 }}
+                          ></SimpleMenu>
+                        )}
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              </AccordionSummary>
-              <hr className={classes.hr}></hr>
-              <AccordionDetails>
-                <Box
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    width: "100%",
-                  }}
-                >
-                  <CardMedia
-                    style={{ height: 170, width: "40%" }}
-                    image={"https://localhost:5001/" + item.imageSRC}
-                    title="Contemplative Reptile"
-                  />
-                  <CardContent style={{ height: 170, width: "60%" }}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {item.name}
-                    </Typography>
-                    <Typography
-                      className="lizardsStyle"
-                      style={{ overflowY: "scroll", height: 100 }}
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      {item.description}
-                    </Typography>
-                  </CardContent>
-                </Box>
-              </AccordionDetails>
-            </Accordion>
-          </div>
+                </AccordionSummary>
+                <hr className={classes.hr}></hr>
+                <AccordionDetails>
+                  <Box
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      width: "100%",
+                    }}
+                  >
+                    <CardMedia
+                      style={{ height: 170, width: "40%" }}
+                      image={"https://localhost:5001/" + item.imageSRC}
+                      title="Contemplative Reptile"
+                    />
+                    <CardContent style={{ height: 170, width: "60%" }}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {item.name}
+                      </Typography>
+                      <Typography
+                        className="lizardsStyle"
+                        style={{ overflowY: "scroll", height: 100 }}
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        {item.description}
+                      </Typography>
+                    </CardContent>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+          );
+        });
+      else
+        return (
+          <Container
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: 700,
+              padding: 0,
+            }}
+          >
+            <CircularProgress />
+          </Container>
         );
-      });
-    else
-      return (
-        <Container
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            width: 700,
-            padding: 0,
-          }}
-        >
-          <CircularProgress />
-        </Container>
-      );
+    if (dataEmpty) return <div>No hay datos para mostrar</div>;
   };
 
   return (

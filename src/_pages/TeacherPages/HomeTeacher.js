@@ -10,8 +10,7 @@ export default function HomeTeacher() {
   useEffect(() => {
     var user = authenticationService.currentUserValue();
     setItems(user);
-    console.log(items);
-  });
+  }, []);
 
   return (
     <Container style={{ marginTop: 150 }}>
