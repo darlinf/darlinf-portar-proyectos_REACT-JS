@@ -11,7 +11,6 @@ import { studentService } from "../../_services/student.service";
 import { teacherService } from "../../_services/teacher.service";
 
 const axios = require("axios");
-const student = authenticationService.currentUserValue();
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,7 +38,7 @@ export default function FinalProjectStudent({ match: { params } }) {
   const [state2, setState2] = React.useState({ file: null });
   const [description, setDescription] = React.useState({ file: null });
   let imgUrl, pdfUrl;
-
+  const student = authenticationService.currentUserValue();
   //send image
   const onFormSubmit = (e) => {
     e.preventDefault();

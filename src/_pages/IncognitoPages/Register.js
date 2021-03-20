@@ -12,6 +12,10 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { CodeSharp } from "@material-ui/icons";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import Box from "@material-ui/core/Box";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -51,6 +55,8 @@ export default function Login(props) {
   const [open, setOpen] = React.useState(false);
 
   const [openDialog, setOpenDialog] = React.useState(false);
+
+  const [passwordType, setPasswordType] = React.useState("password");
 
   const handleClickOpenDialog = () => {
     setOpenDialog(true);
@@ -95,6 +101,7 @@ export default function Login(props) {
               MailITSCTeacher: "",
               name: "",
               password: "",
+              subjectCode: "",
             }}
             validationSchema={Yup.object().shape({
               Enrollment: Yup.string().required("o"),
@@ -104,6 +111,7 @@ export default function Login(props) {
               MailITSCTeacher: Yup.string().required("o"),
               name: Yup.string().required("o"),
               password: Yup.string().required("o"),
+              subjectCode: Yup.string().required("o"),
             })}
             onSubmit={(initialValues, { setStatus, setSubmitting }) => {
               setStatus();
@@ -166,22 +174,46 @@ export default function Login(props) {
                 <InputCustoms
                   errors={errors}
                   touched={touched}
-                  keyObj="password"
-                  name="Contraseña"
+                  keyObj="subjectCode"
+                  name="Mi grupo"
                 />
 
-                <InputCustoms
-                  errors={errors}
-                  touched={touched}
-                  keyObj="name"
-                  name="Repetir contraseña"
-                />
+                <Box style={{ display: "flex" }}>
+                  <InputCustoms
+                    errors={errors}
+                    touched={touched}
+                    keyObj="password"
+                    name="Contraseña"
+                    type={passwordType}
+                  />
+                  {passwordType === "password" && (
+                    <VisibilityOffIcon
+                      style={{ marginTop: 7, marginLeft: 5, cursor: "pointer" }}
+                      onClick={() => {
+                        if (passwordType === "password")
+                          setPasswordType("text");
+                        else if (passwordType === "text")
+                          setPasswordType("password");
+                      }}
+                    />
+                  )}
+                  {passwordType === "text" && (
+                    <VisibilityIcon
+                      style={{ marginTop: 7, marginLeft: 5, cursor: "pointer" }}
+                      onClick={() => {
+                        if (passwordType === "password")
+                          setPasswordType("text");
+                        else if (passwordType === "text")
+                          setPasswordType("password");
+                      }}
+                    />
+                  )}
+                </Box>
 
                 <Container
                   style={{
                     display: "flex",
                     justifyContent: "space-around",
-                    marginTop: "10px",
                   }}
                 >
                   <div className="form-group">
@@ -193,7 +225,7 @@ export default function Login(props) {
                     )}
                     <button
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn btn-primary "
                       disabled={isSubmitting}
                     >
                       Hacer solicitud

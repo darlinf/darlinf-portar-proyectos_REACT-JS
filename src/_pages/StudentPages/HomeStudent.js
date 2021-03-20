@@ -3,9 +3,10 @@ import { Container, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import { authenticationService } from "../../_services/authentication.service";
-var user = authenticationService.currentUserValue();
 
 export default function HomeStudent() {
+  var user = authenticationService.currentUserValue();
+
   const [items] = useState(user);
 
   return (

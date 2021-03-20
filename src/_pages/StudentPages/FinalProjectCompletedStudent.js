@@ -9,11 +9,10 @@ import { Container } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { CardMedia } from "@material-ui/core";
 
-const student = authenticationService.currentUserValue();
-
 export default function FinalProjectCompletedStudent() {
   const [item, setItem] = useState({});
 
+  const student = authenticationService.currentUserValue();
   useEffect(() => {
     studentService
       .GetFinalProyect(student.studentId)

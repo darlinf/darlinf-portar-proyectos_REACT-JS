@@ -18,19 +18,21 @@ const ProposedProjectsShowStudent = () => {
   const [studentId] = useState(
     authenticationService.currentUserValue().studentId
   );
-
-  console.log(studentId);
+  const student = authenticationService.currentUserValue();
+  console.log(student);
 
   useEffect(() => {
     studentService
-      .GetAllProposedProject(9, "3")
+      .GetAllProposedProject(student.id, "" + student.belongGroup)
       .then((data) => {
         setItems(data);
-        data.forEach((x) => {
-          if (x.state === "approved") {
-            setProposedProjectState(true);
-          }
-        });
+        if (data[0])
+          data.forEach((x) => {
+            if (x.state === "approved") {
+              setProposedProjectState(true);
+            }
+          });
+        console.log(data);
       })
       .catch((error) => {
         console.error(error);

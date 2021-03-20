@@ -147,14 +147,15 @@ export default function Navbar(props) {
               {user.role === "Student" && (
                 <div>
                   <Button>
-                    {proposedProject !== "completed" && (
-                      <Link
-                        to={"/finalProjectStudent/" + proposedProject}
-                        style={{ color: "white", textDecoration: "none" }}
-                      >
-                        Final
-                      </Link>
-                    )}
+                    {proposedProject !== "completed" &&
+                      proposedProject !== null && (
+                        <Link
+                          to={"/finalProjectStudent/" + proposedProject}
+                          style={{ color: "white", textDecoration: "none" }}
+                        >
+                          Final
+                        </Link>
+                      )}
                     {proposedProject === "completed" && (
                       <Link
                         to={"/finalProjectCompletedStudent"}

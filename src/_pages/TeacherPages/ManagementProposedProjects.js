@@ -67,6 +67,7 @@ export default function ManagementProposedProjects() {
   let sectionG = "all",
     stateG = "all";
   const teacher = authenticationService.currentUserValue();
+  const [dataEmpty, setDataEmpty] = useState(false);
 
   const handleChangeSection = (event) => {
     setAgeSection(event.target.value);
@@ -128,6 +129,8 @@ export default function ManagementProposedProjects() {
       .then((data) => {
         setItems(data);
         setItemsCopy(data);
+        if (data[0]) setDataEmpty(false);
+        if (!data[0]) setDataEmpty(true);
       })
       .catch((error) => {
         console.error(error);
@@ -160,183 +163,207 @@ export default function ManagementProposedProjects() {
   }, []);
 
   const ShowData = () => {
-    if (items[0])
-      return items.map((item) => {
-        return (
-          <div key={item.proposedProjectsId}>
-            <Accordion
-              expanded={expanded === "panel1" + item.proposedProjectsId}
-              onChange={handleChange("panel1" + item.proposedProjectsId)}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls={"panel1bh-content"}
-                id={"panel1bh-header"}
+    if (!dataEmpty)
+      if (items[0])
+        return items.map((item) => {
+          return (
+            <div key={item.proposedProjectsId}>
+              <Accordion
+                expanded={expanded === "panel1" + item.proposedProjectsId}
+                onChange={handleChange("panel1" + item.proposedProjectsId)}
               >
-                <Box
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100%",
-                  }}
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls={"panel1bh-content"}
+                  id={"panel1bh-header"}
                 >
                   <Box
                     style={{
                       display: "flex",
-                      justifyContent: "space-between",
+                      flexDirection: "column",
                       width: "100%",
                     }}
                   >
-                    <Typography>
-                      Estudiante:{" "}
-                      <Typography
-                        component="span"
-                        style={{ fontWeight: "bold" }}
-                      >
-                        {item.studenName}
-                      </Typography>
-                    </Typography>
-                    <Typography>
-                      Matricula:{" "}
-                      <Typography
-                        component="span"
-                        style={{ fontWeight: "bold" }}
-                      >
-                        {item.enrollment}
-                      </Typography>
-                    </Typography>
-                    <Typography>
-                      Proyecto:{" "}
-                      <Typography
-                        component="span"
-                        style={{ fontWeight: "bold" }}
-                      >
-                        {item.name}
-                      </Typography>
-                    </Typography>
-                  </Box>
-                  <Box
-                    onClick={(event) => event.stopPropagation()}
-                    onFocus={(event) => event.stopPropagation()}
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <Box></Box>
                     <Box
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
-
-                        marginTop: "13px",
+                        width: "100%",
                       }}
                     >
-                      {item && (
-                        <div>
-                          {item.state !== "denied" && (
-                            <Button
-                              size="small"
-                              style={{ width: 60, height: 20, marginRight: 4 }}
-                              variant="contained"
-                              color="secondary"
-                              onClick={() => handleStateProject("denied", item)}
-                            >
-                              Negar
-                            </Button>
-                          )}
-                        </div>
-                      )}
-                      {item && (
-                        <div>
-                          {item.state !== "potential" && (
-                            <Button
-                              size="small"
-                              variant="contained"
-                              style={{ width: 73, height: 20, marginRight: 4 }}
-                              onClick={() =>
-                                handleStateProject("potential", item)
-                              }
-                            >
-                              Guardar
-                            </Button>
-                          )}
-                        </div>
-                      )}
-                      {item && (
-                        <div>
-                          {item.state !== "approved" && (
-                            <Button
-                              size="small"
-                              style={{ width: 73, height: 20, marginRight: 5 }}
-                              variant="contained"
-                              color="primary"
-                              onClick={() =>
-                                handleStateProject("approved", item)
-                              }
-                            >
-                              Aprobar
-                            </Button>
-                          )}
-                        </div>
-                      )}
+                      <Typography>
+                        Estudiante:{" "}
+                        <Typography
+                          component="span"
+                          style={{ fontWeight: "bold" }}
+                        >
+                          {item.studenName}
+                        </Typography>
+                      </Typography>
+                      <Typography>
+                        Matricula:{" "}
+                        <Typography
+                          component="span"
+                          style={{ fontWeight: "bold" }}
+                        >
+                          {item.enrollment}
+                        </Typography>
+                      </Typography>
+                      <Typography>
+                        Proyecto:{" "}
+                        <Typography
+                          component="span"
+                          style={{ fontWeight: "bold" }}
+                        >
+                          {item.name}
+                        </Typography>
+                      </Typography>
+                    </Box>
+                    <Box
+                      onClick={(event) => event.stopPropagation()}
+                      onFocus={(event) => event.stopPropagation()}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Box></Box>
+                      <Box
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+
+                          marginTop: "13px",
+                        }}
+                      >
+                        {item && (
+                          <div>
+                            {item.state !== "denied" && (
+                              <Button
+                                size="small"
+                                style={{
+                                  width: 60,
+                                  height: 20,
+                                  marginRight: 4,
+                                }}
+                                variant="contained"
+                                color="secondary"
+                                onClick={() =>
+                                  handleStateProject("denied", item)
+                                }
+                              >
+                                Negar
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                        {item && (
+                          <div>
+                            {item.state !== "potential" && (
+                              <Button
+                                size="small"
+                                variant="contained"
+                                style={{
+                                  width: 73,
+                                  height: 20,
+                                  marginRight: 4,
+                                }}
+                                onClick={() =>
+                                  handleStateProject("potential", item)
+                                }
+                              >
+                                Guardar
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                        {item && (
+                          <div>
+                            {item.state !== "approved" && (
+                              <Button
+                                size="small"
+                                style={{
+                                  width: 73,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                                variant="contained"
+                                color="primary"
+                                onClick={() =>
+                                  handleStateProject("approved", item)
+                                }
+                              >
+                                Aprobar
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Box className={classes.rootCard}>
-                  <Box>
-                    <Box style={{ display: "flex" }}>
-                      <Box style={{ width: "325px" }}>
-                        <Typography>Descripción</Typography>
-                        <Typography
-                          className="lizardsStyle"
-                          style={{
-                            overflowY: "scroll",
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Box className={classes.rootCard}>
+                    <Box>
+                      <Box style={{ display: "flex" }}>
+                        <Box style={{ width: "325px" }}>
+                          <Typography>Descripción</Typography>
+                          <Typography
+                            className="lizardsStyle"
+                            style={{
+                              overflowY: "scroll",
 
-                            height: 100,
-                          }}
-                          variant="body2"
-                          color="textSecondary"
-                          component="p"
-                        >
-                          {item.description}
-                        </Typography>
-                      </Box>
-                      <Box style={{ marginLeft: 20, width: "325px" }}>
-                        <Typography>Justificación</Typography>
-                        <Typography
-                          className="lizardsStyle"
-                          style={{
-                            overflowY: "scroll",
+                              height: 100,
+                            }}
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                          >
+                            {item.description}
+                          </Typography>
+                        </Box>
+                        <Box style={{ marginLeft: 20, width: "325px" }}>
+                          <Typography>Justificación</Typography>
+                          <Typography
+                            className="lizardsStyle"
+                            style={{
+                              overflowY: "scroll",
 
-                            height: 100,
-                          }}
-                          variant="body2"
-                          color="textSecondary"
-                          component="p"
-                        >
-                          {item.justification}
-                        </Typography>
+                              height: 100,
+                            }}
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                          >
+                            {item.justification}
+                          </Typography>
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
-                </Box>
-              </AccordionDetails>
-            </Accordion>
-          </div>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+          );
+        });
+      else
+        return (
+          <Container
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: 700,
+              padding: 0,
+            }}
+          >
+            <CircularProgress />
+          </Container>
         );
-      });
-    else
+    if (dataEmpty)
       return (
-        <Container
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            width: 700,
-            padding: 0,
-          }}
-        >
-          <CircularProgress />
-        </Container>
+        <Typography style={{ textAlign: "center", fontSize: 20 }}>
+          No hay datos para mostrar.
+        </Typography>
       );
   };
 

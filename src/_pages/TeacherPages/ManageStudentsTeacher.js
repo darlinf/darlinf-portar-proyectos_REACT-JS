@@ -67,6 +67,8 @@ export default function ManageStudentsTeacher() {
   const [ageState, setAgeState] = React.useState("");
   let sectionG = "all",
     stateG = "all";
+  const [dataEmpty, setDataEmpty] = useState(false);
+
   const teacher = authenticationService.currentUserValue();
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -116,6 +118,8 @@ export default function ManageStudentsTeacher() {
       .then((data) => {
         console.log(data);
         setSections(data);
+        if (data[0]) setDataEmpty(false);
+        if (!data[0]) setDataEmpty(true);
       })
       .catch((error) => {
         console.error(error);
@@ -133,6 +137,8 @@ export default function ManageStudentsTeacher() {
       .then((data) => {
         setItems(data);
         setItemsCopy(data);
+        if (data[0]) setDataEmpty(false);
+        if (!data[0]) setDataEmpty(true);
       })
       .catch((error) => {
         console.error(error);
@@ -140,100 +146,117 @@ export default function ManageStudentsTeacher() {
   };
 
   const searchTo = (value) => {
+    console.log(items);
+
     setItems(
       itemsCopy.filter(
         (el) => el.enrollment.toLowerCase().indexOf(value.toLowerCase()) !== -1
       )
     );
+    if (items[0]) setDataEmpty(false);
+    if (!items[0]) setDataEmpty(true);
   };
 
   const ShowData = () => {
-    if (items[0])
-      return items.map((item) => {
-        return (
-          <Accordion
-            key={item.studentId}
-            expanded={expanded === "panel1" + item.studentId}
-            onChange={handleChange("panel1" + item.studentId)}
-          >
-            <AccordionSummary>
-              <Box
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  width: "100%",
-                }}
-              >
+    if (!dataEmpty)
+      if (items[0])
+        return items.map((item) => {
+          return (
+            <Accordion
+              key={item.studentId}
+              expanded={expanded === "panel1" + item.studentId}
+              onChange={handleChange("panel1" + item.studentId)}
+            >
+              <AccordionSummary>
                 <Box
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
-                    width: "60%",
+                    flexDirection: "row",
+                    width: "100%",
                   }}
                 >
-                  <Typography>
-                    Estudiante:{" "}
-                    <Typography component="span" style={{ fontWeight: "bold" }}>
-                      {item.name}
+                  <Box
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "60%",
+                    }}
+                  >
+                    <Typography>
+                      Estudiante:{" "}
+                      <Typography
+                        component="span"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {item.name}
+                      </Typography>
                     </Typography>
-                  </Typography>
-                  <Typography>
-                    Matricula:{" "}
-                    <Typography component="span" style={{ fontWeight: "bold" }}>
-                      {item.enrollment}
+                    <Typography>
+                      Matricula:{" "}
+                      <Typography
+                        component="span"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {item.enrollment}
+                      </Typography>
                     </Typography>
-                  </Typography>
-                </Box>
-                <Box
-                  onClick={(event) => event.stopPropagation()}
-                  onFocus={(event) => event.stopPropagation()}
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    width: "300px",
-                  }}
-                >
-                  {item.state !== "denied" && (
-                    <Button
-                      size="small"
-                      style={{ width: 80, height: 20, marginLeft: 5 }}
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => handleSetValue("denied", item)}
-                    >
-                      Negar
-                    </Button>
-                  )}
+                  </Box>
+                  <Box
+                    onClick={(event) => event.stopPropagation()}
+                    onFocus={(event) => event.stopPropagation()}
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      width: "300px",
+                    }}
+                  >
+                    {item.state !== "denied" && (
+                      <Button
+                        size="small"
+                        style={{ width: 80, height: 20, marginLeft: 5 }}
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => handleSetValue("denied", item)}
+                      >
+                        Negar
+                      </Button>
+                    )}
 
-                  {item.state !== "approved" && (
-                    <Button
-                      size="small"
-                      variant="contained"
-                      color="primary"
-                      style={{ width: 80, height: 20, marginLeft: 5 }}
-                      onClick={() => handleSetValue("approved", item)}
-                    >
-                      Aprobar
-                    </Button>
-                  )}
+                    {item.state !== "approved" && (
+                      <Button
+                        size="small"
+                        variant="contained"
+                        color="primary"
+                        style={{ width: 80, height: 20, marginLeft: 5 }}
+                        onClick={() => handleSetValue("approved", item)}
+                      >
+                        Aprobar
+                      </Button>
+                    )}
+                  </Box>
                 </Box>
-              </Box>
-            </AccordionSummary>
-          </Accordion>
+              </AccordionSummary>
+            </Accordion>
+          );
+        });
+      else
+        return (
+          <Container
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: 750,
+              padding: 0,
+            }}
+          >
+            <CircularProgress />
+          </Container>
         );
-      });
-    else
+    if (dataEmpty)
       return (
-        <Container
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            width: 750,
-            padding: 0,
-          }}
-        >
-          <CircularProgress />
-        </Container>
+        <Typography style={{ textAlign: "center", fontSize: 20 }}>
+          No hay datos para mostrar.
+        </Typography>
       );
   };
 
@@ -274,7 +297,9 @@ export default function ManageStudentsTeacher() {
             style={{ border: "none", width: 200 }}
           >
             {sections.map((x) => (
-              <MenuItem value={x.sectionNumber}>{x.sectionNumber}</MenuItem>
+              <MenuItem key={x.id} value={x.sectionNumber}>
+                {x.sectionNumber}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>

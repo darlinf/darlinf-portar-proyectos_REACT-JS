@@ -145,16 +145,16 @@ export default function ManageFinalProjectsTeacher() {
   const [showLinearProgress, setShowLinearProgress] = useState(false);
   const [itemsCopy, setItemsCopy] = useState([]);
   const [sections, setSections] = useState([]);
-  let dataEmpty = true;
-
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+  const [dataEmpty, setDataEmpty] = useState(false);
   const [ageSection, setAgeSection] = React.useState("");
   const [ageState, setAgeState] = React.useState("");
   let sectionG = "all",
     stateG = "all";
   const teacher = authenticationService.currentUserValue();
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   const handleChangeSection = (event) => {
     setAgeSection(event.target.value);
@@ -188,8 +188,10 @@ export default function ManageFinalProjectsTeacher() {
       .then((data) => {
         setItems(data);
         setItemsCopy(data);
-        /* if (data) dataEmpty = true;
-        if (!data) dataEmpty = false;*/
+        if (data[0]) setDataEmpty(false);
+        if (!data[0]) setDataEmpty(true);
+
+        console.log(data[0]);
       })
       .catch((error) => {
         console.error(error);
@@ -376,7 +378,12 @@ export default function ManageFinalProjectsTeacher() {
             <CircularProgress />
           </Container>
         );
-    if (dataEmpty) return <div>No hay datos para mostrar</div>;
+    if (dataEmpty)
+      return (
+        <Typography style={{ textAlign: "center", fontSize: 20 }}>
+          No hay datos para mostrar.
+        </Typography>
+      );
   };
 
   return (
@@ -416,7 +423,9 @@ export default function ManageFinalProjectsTeacher() {
             style={{ border: "none", width: 200 }}
           >
             {sections.map((x) => (
-              <MenuItem value={x.sectionNumber}>{x.sectionNumber}</MenuItem>
+              <MenuItem key={x.id} value={x.sectionNumber}>
+                {x.sectionNumber}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
