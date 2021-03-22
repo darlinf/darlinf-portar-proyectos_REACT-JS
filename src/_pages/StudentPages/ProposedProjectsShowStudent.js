@@ -18,6 +18,8 @@ const ProposedProjectsShowStudent = () => {
   const [studentId] = useState(
     authenticationService.currentUserValue().studentId
   );
+  const [dataEmpty, setDataEmpty] = useState(false);
+
   const student = authenticationService.currentUserValue();
   console.log(student);
 
@@ -32,6 +34,9 @@ const ProposedProjectsShowStudent = () => {
               setProposedProjectState(true);
             }
           });
+
+        if (data[0]) setDataEmpty(false);
+        if (!data[0]) setDataEmpty(true);
         console.log(data);
       })
       .catch((error) => {
@@ -40,101 +45,83 @@ const ProposedProjectsShowStudent = () => {
   }, []);
 
   const ShowData = () => {
-    if (items[0])
-      return items.map((item) => {
-        return (
-          <Card key={item.id}>
-            <CardContent>
-              <Typography
-                style={{ textAlign: "center" }}
-                gutterBottom
-                variant="h5"
-                component="h2"
-              >
-                {item.name}
-              </Typography>
-              <Box style={{ display: "flex" }}>
-                <Box style={{ width: "50%" }}>
-                  <Typography>Descripción</Typography>
-                  <Typography
-                    className="lizardsStyle"
-                    style={{ overflowY: "scroll", height: 100 }}
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {item.description}
-                  </Typography>
-                </Box>
-                <Box style={{ width: "50%", marginLeft: 20 }}>
-                  <Typography>Justificación</Typography>
-                  <Typography
-                    className="lizardsStyle"
-                    style={{ overflowY: "scroll", height: 100 }}
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {item.justification}
-                  </Typography>
-                </Box>
-              </Box>
-              <Box>
-                <CardActions
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginTop: 7,
-                  }}
+    if (!dataEmpty)
+      if (items[0])
+        return items.map((item) => {
+          return (
+            <Card key={item.id}>
+              <CardContent>
+                <Typography
+                  style={{ textAlign: "center" }}
+                  gutterBottom
+                  variant="h5"
+                  component="h2"
                 >
-                  <Typography>
-                    Estado:{" "}
-                    <Typography component="span" style={{ fontWeight: "bold" }}>
-                      {item.state}
+                  {item.name}
+                </Typography>
+                <Box style={{ display: "flex" }}>
+                  <Box style={{ width: "50%" }}>
+                    <Typography>Descripción</Typography>
+                    <Typography
+                      className="lizardsStyle"
+                      style={{ overflowY: "scroll", height: 100 }}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      {item.description}
                     </Typography>
-                  </Typography>
-                </CardActions>
-                {item.studentId === studentId && !proposedProjectState && (
-                  <Box
-                    style={{ display: "flex", flexDirection: "row-reverse" }}
-                  >
-                    <Button variant="outlined" color="primary" size="small">
-                      Editar
-                    </Button>
                   </Box>
-                )}
-                {item.studentId === studentId && item.state === "approved" && (
-                  <Box
-                    style={{ display: "flex", flexDirection: "row-reverse" }}
+                  <Box style={{ width: "50%", marginLeft: 20 }}>
+                    <Typography>Justificación</Typography>
+                    <Typography
+                      className="lizardsStyle"
+                      style={{ overflowY: "scroll", height: 100 }}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      {item.justification}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box>
+                  <CardActions
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginTop: 7,
+                    }}
                   >
-                    <Button variant="outlined" color="primary" size="small">
-                      <Link
-                        to={"/finalProjectStudent/" + item.name}
-                        style={{ textDecoration: "none" }}
+                    <Typography>
+                      Estado:{" "}
+                      <Typography
+                        component="span"
+                        style={{ fontWeight: "bold" }}
                       >
-                        Completar
-                      </Link>
-                    </Button>
-                  </Box>
-                )}
-              </Box>
-            </CardContent>
-          </Card>
+                        {item.state}
+                      </Typography>
+                    </Typography>
+                  </CardActions>
+                </Box>
+              </CardContent>
+            </Card>
+          );
+        });
+      else
+        return (
+          <Container
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: 940,
+              padding: 0,
+            }}
+          >
+            <CircularProgress />
+          </Container>
         );
-      });
-    else
-      return (
-        <Container
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            width: 940,
-            padding: 0,
-          }}
-        >
-          <CircularProgress />
-        </Container>
-      );
+    if (dataEmpty) return <div></div>;
   };
 
   return (
@@ -144,19 +131,55 @@ const ProposedProjectsShowStudent = () => {
       >
         Proyectos propuestos
       </Typography>
-      <Container
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gridGap: "5px",
-          width: 940,
-          padding: 0,
-        }}
-      >
-        <ShowData />
-      </Container>
+
+      <Card style={{ width: 300, margin: "auto" }}>
+        {dataEmpty && (
+          <Typography style={{ textAlign: "center", fontSize: 20 }}>
+            No hay datos para mostrar.
+          </Typography>
+        )}
+      </Card>
+      <div>
+        {!dataEmpty && (
+          <Container
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gridGap: "5px",
+              width: 940,
+              padding: 0,
+            }}
+          >
+            <ShowData />
+          </Container>
+        )}
+      </div>
     </Container>
   );
 };
 
 export default ProposedProjectsShowStudent;
+
+/* {item.studentId === studentId && !proposedProjectState && (
+                    <Box
+                      style={{ display: "flex", flexDirection: "row-reverse" }}
+                    >
+                      <Button variant="outlined" color="primary" size="small">
+                        Editar
+                      </Button>
+                    </Box>
+                  )}
+                  {item.studentId === studentId && item.state === "approved" && (
+                    <Box
+                      style={{ display: "flex", flexDirection: "row-reverse" }}
+                    >
+                      <Button variant="outlined" color="primary" size="small">
+                        <Link
+                          to={"/finalProjectStudent/" + item.name}
+                          style={{ textDecoration: "none" }}
+                        >
+                          Completar
+                        </Link>
+                      </Button>
+                    </Box>
+                  )}*/

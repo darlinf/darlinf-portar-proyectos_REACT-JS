@@ -13,9 +13,6 @@ import { useHistory } from "react-router-dom";
 
 import { authenticationService } from "../_services/authentication.service";
 import MenuNav from "./MenuNav";
-import { studentService } from "../_services/student.service";
-
-const student = authenticationService.currentUserValue();
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +46,9 @@ export default function Navbar(props) {
     authenticationService.currentUser.subscribe((x) => {
       setUser(x);
       console.log(x);
-      if (x) if (x.homeState) setProposedProject(x.homeState);
+      if (x) {
+        if (x.homeState) setProposedProject(x.homeState);
+      } else setProposedProject(null);
     });
   }, []);
 
@@ -148,7 +147,8 @@ export default function Navbar(props) {
                 <div>
                   <Button>
                     {proposedProject !== "completed" &&
-                      proposedProject !== null && (
+                      proposedProject !== null &&
+                      proposedProject !== undefined && (
                         <Link
                           to={"/finalProjectStudent/" + proposedProject}
                           style={{ color: "white", textDecoration: "none" }}

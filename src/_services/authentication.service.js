@@ -11,6 +11,7 @@ export const authenticationService = {
   login,
   logout,
   register,
+  currentUserSubject,
   currentUser: currentUserSubject.asObservable(),
   currentUserValue() {
     return currentUserSubject.value;

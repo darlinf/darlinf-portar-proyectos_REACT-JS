@@ -6,6 +6,12 @@ import Box from "@material-ui/core/Box";
 import IconButton from "@material-ui/core/IconButton";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import { makeStyles } from "@material-ui/core/styles";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+
 import { authenticationService } from "../../_services/authentication.service";
 import { studentService } from "../../_services/student.service";
 import { teacherService } from "../../_services/teacher.service";
@@ -32,13 +38,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FinalProjectStudent({ match: { params } }) {
+export default function FinalProjectStudent(props) {
   const classes = useStyles();
   const [state, setState] = React.useState({ file: null });
   const [state2, setState2] = React.useState({ file: null });
   const [description, setDescription] = React.useState({ file: null });
   let imgUrl, pdfUrl;
   const student = authenticationService.currentUserValue();
+  const [openDialog, setOpenDialog] = React.useState(false);
+  let params = props.match.params;
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    props.history.push({ pathname: "/homeStudent" });
+    setOpenDialog(false);
+  };
+
   //send image
   const onFormSubmit = (e) => {
     e.preventDefault();
@@ -100,16 +118,23 @@ export default function FinalProjectStudent({ match: { params } }) {
       .createFinalProject(data)
       .then((response) => {
         console.log(response);
-        studentService
-          .updateUserForFinalProject(student.studentId, "completed")
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
       })
       .catch((error) => {});
+  };
+
+  const updateUserForFinalProject = () => {
+    studentService
+      .updateUserForFinalProject(student.studentId, "completed")
+      .then((data) => {
+        let studentCopy = student;
+        studentCopy.homeState = "completed";
+        handleClickOpenDialog();
+        localStorage.setItem("currentUser", JSON.stringify(studentCopy));
+        authenticationService.currentUserSubject.next(studentCopy);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -129,6 +154,7 @@ export default function FinalProjectStudent({ match: { params } }) {
             onSubmit={(e) => {
               onFormSubmit(e);
               onFormSubmit2(e);
+              updateUserForFinalProject();
             }}
           >
             <h1>Imagen de portada</h1>
@@ -161,6 +187,27 @@ export default function FinalProjectStudent({ match: { params } }) {
           </form>
         </Card>
       </Container>
+      <div>
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"¡Guardado!"}</DialogTitle>
+          <DialogContent style={{ width: 500 }}>
+            <DialogContentText id="alert-dialog-description">
+              Tu proyecto final ha sido guardado. Tu maestro será notificado y
+              el hará la evaluación correspondiente.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary" autoFocus>
+              Aceptar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </div>
   );
 }

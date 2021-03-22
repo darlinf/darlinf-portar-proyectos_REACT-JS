@@ -14,12 +14,13 @@ function Alert(props) {
 }
 
 export default function ProposedProjectsStudent(props) {
+  let student = authenticationService.currentUserValue();
   const initalState = {
     name: "",
     description: "",
     justification: "",
     state: "evaluate",
-    studentId: "",
+    studentId: student.studentId,
   };
   const [open, setOpen] = React.useState(false);
   const [state, setState] = useState(initalState);
@@ -29,9 +30,9 @@ export default function ProposedProjectsStudent(props) {
   };
 
   const sendRequest = () => {
-    let student = authenticationService.currentUserValue();
-    handleChangeText(student.studentId, "studentId");
+    //handleChangeText(student.studentId, "studentId");
     console.log(state);
+    console.log(student.studentId);
 
     studentService
       .CreateProposedProject(state)

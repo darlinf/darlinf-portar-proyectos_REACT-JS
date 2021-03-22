@@ -51,7 +51,7 @@ export default function FinalProjectCompletedStudent() {
               </Typography>
             </CardContent>
           )}
-          {item.state === "approved" && item.state === "approved and not" && (
+          {(item.state === "approved" || item.state === "approved and not") && (
             <CardContent>
               <Typography style={{ fontSize: 25, textAlign: "center" }}>
                 Tu proyecto ha sido aprobado.
@@ -88,7 +88,9 @@ export default function FinalProjectCompletedStudent() {
               justifyContent: "space-between",
             }}
           >
-            <Typography>Calificación {item.examGrade}</Typography>
+            {item.examGrade !== null && (
+              <Typography>Calificación {item.examGrade}</Typography>
+            )}
             <a
               target="blank"
               href={"https://localhost:5001/" + item.finalDocumentationSRC}

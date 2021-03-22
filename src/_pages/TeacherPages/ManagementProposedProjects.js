@@ -131,6 +131,7 @@ export default function ManagementProposedProjects() {
         setItemsCopy(data);
         if (data[0]) setDataEmpty(false);
         if (!data[0]) setDataEmpty(true);
+        console.log(data);
       })
       .catch((error) => {
         console.error(error);
