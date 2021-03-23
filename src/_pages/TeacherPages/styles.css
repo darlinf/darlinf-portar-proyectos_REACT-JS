@@ -1,0 +1,8 @@
+.textV{
+  writing-mode: vertical-lr; 
+  transform: rotate(-180deg);
+  margin-top: 5px;
+  margin-left: 3px;
+  color: white;
+  text-shadow: 0 0 7px black;
+}

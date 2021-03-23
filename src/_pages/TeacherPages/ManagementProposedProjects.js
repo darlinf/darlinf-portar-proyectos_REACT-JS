@@ -13,12 +13,12 @@ import Divider from "@material-ui/core/Divider";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-import Box from "@material-ui/core/Box";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { teacherService } from "../../_services/teacher.service";
 import { authenticationService } from "../../_services/authentication.service";
+import "./styles.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -131,11 +131,36 @@ export default function ManagementProposedProjects() {
         setItemsCopy(data);
         if (data[0]) setDataEmpty(false);
         if (!data[0]) setDataEmpty(true);
-        console.log(data);
+        //console.log(data);
+
+        processingData(data);
       })
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const [dataProc, setDataProc] = useState([]);
+
+  const processingData = (data) => {
+    console.log(data);
+    let dataObj = [];
+    let beforeBelongGroup = "0"; //data[0].belongGroup
+    data.map((x) => {
+      if (beforeBelongGroup !== x.belongGroup) {
+        dataObj.push({
+          groupNo: x.belongGroup,
+          group: data.filter((y) => y.belongGroup === x.belongGroup),
+        });
+        beforeBelongGroup = x.belongGroup;
+        console.log(beforeBelongGroup);
+        return dataObj;
+      }
+      console.log(beforeBelongGroup);
+      return {};
+    });
+    console.log(dataObj);
+    setDataProc(dataObj);
   };
 
   const searchTo = (value) => {
@@ -163,7 +188,297 @@ export default function ManagementProposedProjects() {
     getApi();
   }, []);
 
+  let colorSwitch = true;
+  function getRandomColor() {
+    let color = colorSwitch === true ? "rgb(120, 94, 78)" : "rgb(27, 78, 125)";
+    colorSwitch = !colorSwitch;
+    return color;
+  }
+
   const ShowData = () => {
+    if (!dataEmpty)
+      if (items[0])
+        return dataProc.map((g) => {
+          return (
+            <div style={{ display: "flex" }}>
+              <div style={{ width: "3%", backgroundColor: getRandomColor() }}>
+                <p className="textV">Grupo {g.groupNo}</p>
+              </div>
+              <div style={{ width: "97%" }}>
+                {g.group.map((item) => {
+                  return (
+                    <div key={item.proposedProjectsId}>
+                      <Accordion
+                        expanded={
+                          expanded === "panel1" + item.proposedProjectsId
+                        }
+                        onChange={handleChange(
+                          "panel1" + item.proposedProjectsId
+                        )}
+                      >
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls={"panel1bh-content"}
+                          id={"panel1bh-header"}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              width: "100%",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                width: "100%",
+                              }}
+                            >
+                              <Typography>
+                                Estudiante:{" "}
+                                <Typography
+                                  component="span"
+                                  style={{ fontWeight: "bold" }}
+                                >
+                                  {item.studenName}
+                                </Typography>
+                              </Typography>
+                              <Typography>
+                                Matricula:{" "}
+                                <Typography
+                                  component="span"
+                                  style={{ fontWeight: "bold" }}
+                                >
+                                  {item.enrollment}
+                                </Typography>
+                              </Typography>
+                              <Typography>
+                                Proyecto:{" "}
+                                <Typography
+                                  component="span"
+                                  style={{ fontWeight: "bold" }}
+                                >
+                                  {item.name}
+                                </Typography>
+                              </Typography>
+                            </div>
+                            <div
+                              onClick={(event) => event.stopPropagation()}
+                              onFocus={(event) => event.stopPropagation()}
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <div></div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+
+                                  marginTop: "13px",
+                                }}
+                              >
+                                {item && (
+                                  <div>
+                                    {item.state !== "denied" && (
+                                      <Button
+                                        size="small"
+                                        style={{
+                                          width: 60,
+                                          height: 20,
+                                          marginRight: 4,
+                                        }}
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={() =>
+                                          handleStateProject("denied", item)
+                                        }
+                                      >
+                                        Negar
+                                      </Button>
+                                    )}
+                                  </div>
+                                )}
+                                {item && (
+                                  <div>
+                                    {item.state !== "potential" && (
+                                      <Button
+                                        size="small"
+                                        variant="contained"
+                                        style={{
+                                          width: 73,
+                                          height: 20,
+                                          marginRight: 4,
+                                        }}
+                                        onClick={() =>
+                                          handleStateProject("potential", item)
+                                        }
+                                      >
+                                        Guardar
+                                      </Button>
+                                    )}
+                                  </div>
+                                )}
+                                {item && (
+                                  <div>
+                                    {item.state !== "approved" && (
+                                      <Button
+                                        size="small"
+                                        style={{
+                                          width: 73,
+                                          height: 20,
+                                          marginRight: 5,
+                                        }}
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() =>
+                                          handleStateProject("approved", item)
+                                        }
+                                      >
+                                        Aprobar
+                                      </Button>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <div className={classes.rootCard}>
+                            <div>
+                              <div style={{ display: "flex" }}>
+                                <div style={{ width: "325px" }}>
+                                  <Typography>Descripción</Typography>
+                                  <Typography
+                                    className="lizardsStyle"
+                                    style={{
+                                      overflowY: "scroll",
+
+                                      height: 100,
+                                    }}
+                                    variant="body2"
+                                    color="textSecondary"
+                                    component="p"
+                                  >
+                                    {item.description}
+                                  </Typography>
+                                </div>
+                                <div style={{ marginLeft: 20, width: "325px" }}>
+                                  <Typography>Justificación</Typography>
+                                  <Typography
+                                    className="lizardsStyle"
+                                    style={{
+                                      overflowY: "scroll",
+
+                                      height: 100,
+                                    }}
+                                    variant="body2"
+                                    color="textSecondary"
+                                    component="p"
+                                  >
+                                    {item.justification}
+                                  </Typography>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </AccordionDetails>
+                      </Accordion>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        });
+      else
+        return (
+          <Container
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: 700,
+              padding: 0,
+            }}
+          >
+            <CircularProgress />
+          </Container>
+        );
+    if (dataEmpty)
+      return (
+        <Typography style={{ textAlign: "center", fontSize: 20 }}>
+          No hay datos para mostrar.
+        </Typography>
+      );
+  };
+
+  return (
+    <Container style={{ width: 750, marginTop: 50 }}>
+      <Typography
+        style={{ textAlign: "center", marginBottom: "10px", fontSize: 40 }}
+      >
+        Gestionar proyectos propuestos
+      </Typography>
+      <Paper component="form" className={classes.root2}>
+        <FormControl className={classes.formControl}>
+          <InputLabel id="demo-simple-select-label">
+            Seleccionar por estado
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={ageState}
+            onChange={handleChangeState}
+            style={{ border: "none", width: 200 }}
+          >
+            <MenuItem value="evaluate">Evaluar</MenuItem>
+            <MenuItem value="approved">Aprobado</MenuItem>
+            <MenuItem value="potential">Potenciar</MenuItem>
+            <MenuItem value="denied">Negado</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl className={classes.formControl}>
+          <InputLabel id="demo-simple-select-label">
+            Seleccionar por sección
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={ageSection}
+            onChange={handleChangeSection}
+            style={{ border: "none", width: 200 }}
+          >
+            {sections.map((x) => (
+              <MenuItem key={x.id} value={x.sectionNumber}>
+                {x.sectionNumber}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <Divider className={classes.divider} orientation="vertical" />
+        <InputBase
+          className={classes.input}
+          placeholder="Buscar proyecto"
+          inputProps={{ "aria-label": "Buscar proyecto" }}
+          onChange={(e) => searchTo(e.target.value)}
+        />
+      </Paper>
+      <div className={classes.root}>
+        <LinearProgress
+          className={classes.animate}
+          style={{ opacity: showLinearProgress ? 1 : 0 }}
+        />
+        <ShowData></ShowData>
+      </div>
+    </Container>
+  );
+}
+/*const ShowData = () => {
     if (!dataEmpty)
       if (items[0])
         return items.map((item) => {
@@ -366,68 +681,4 @@ export default function ManagementProposedProjects() {
           No hay datos para mostrar.
         </Typography>
       );
-  };
-
-  return (
-    <Container style={{ width: 750, marginTop: 50 }}>
-      <Typography
-        style={{ textAlign: "center", marginBottom: "10px", fontSize: 40 }}
-      >
-        Gestionar proyectos propuestos
-      </Typography>
-      <Paper component="form" className={classes.root2}>
-        <FormControl className={classes.formControl}>
-          <InputLabel id="demo-simple-select-label">
-            Seleccionar por estado
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={ageState}
-            onChange={handleChangeState}
-            style={{ border: "none", width: 200 }}
-          >
-            <MenuItem value="evaluate">Evaluar</MenuItem>
-            <MenuItem value="approved">Aprobado</MenuItem>
-            <MenuItem value="potential">Potenciar</MenuItem>
-            <MenuItem value="denied">Negado</MenuItem>
-          </Select>
-        </FormControl>
-
-        <FormControl className={classes.formControl}>
-          <InputLabel id="demo-simple-select-label">
-            Seleccionar por sección
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={ageSection}
-            onChange={handleChangeSection}
-            style={{ border: "none", width: 200 }}
-          >
-            {sections.map((x) => (
-              <MenuItem key={x.id} value={x.sectionNumber}>
-                {x.sectionNumber}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <Divider className={classes.divider} orientation="vertical" />
-        <InputBase
-          className={classes.input}
-          placeholder="Buscar proyecto"
-          inputProps={{ "aria-label": "Buscar proyecto" }}
-          onChange={(e) => searchTo(e.target.value)}
-        />
-      </Paper>
-      <div className={classes.root}>
-        <LinearProgress
-          className={classes.animate}
-          style={{ opacity: showLinearProgress ? 1 : 0 }}
-        />
-        <ShowData></ShowData>
-      </div>
-    </Container>
-  );
-}
+  };*/
