@@ -68,6 +68,7 @@ export default function ManagementProposedProjects() {
     stateG = "all";
   const teacher = authenticationService.currentUserValue();
   const [dataEmpty, setDataEmpty] = useState(false);
+  const [dataProc, setDataProc] = useState([]);
 
   const handleChangeSection = (event) => {
     setAgeSection(event.target.value);
@@ -85,9 +86,8 @@ export default function ManagementProposedProjects() {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const handleStateProject = (state, item) => {
-    item.state = state;
-    var itemUpdate = {
+  const setItemToUpdate = (item, state) => {
+    return {
       id: item.proposedProjectsId,
       name: item.name,
       description: item.description,
@@ -95,6 +95,11 @@ export default function ManagementProposedProjects() {
       state: state,
       studentId: item.studentId,
     };
+  };
+
+  const handleStateProject = (state, item) => {
+    item.state = state;
+    var itemUpdate = setItemToUpdate(item, state);
     console.log(state);
     if (state === "approved") {
       console.log(state);
@@ -131,7 +136,6 @@ export default function ManagementProposedProjects() {
         setItemsCopy(data);
         if (data[0]) setDataEmpty(false);
         if (!data[0]) setDataEmpty(true);
-        //console.log(data);
 
         processingData(data);
       })
@@ -140,12 +144,10 @@ export default function ManagementProposedProjects() {
       });
   };
 
-  const [dataProc, setDataProc] = useState([]);
-
   const processingData = (data) => {
     console.log(data);
     let dataObj = [];
-    let beforeBelongGroup = "0"; //data[0].belongGroup
+    let beforeBelongGroup = "0";
     data.map((x) => {
       if (beforeBelongGroup !== x.belongGroup) {
         dataObj.push({
@@ -183,6 +185,25 @@ export default function ManagementProposedProjects() {
       });
   };
 
+  const handleStateProjectApproved = (newItem, groupNo) => {
+    let oldItem;
+    dataProc.forEach((x) => {
+      if (x.groupNo === groupNo) {
+        x.group.forEach((y) => {
+          if (y.state === "approved") {
+            oldItem = y;
+          }
+        });
+      }
+    });
+    if (oldItem) {
+      oldItem.state = "evaluate";
+      updateApi(setItemToUpdate(oldItem, "evaluate"));
+    }
+    newItem.state = "approved";
+    updateApi(setItemToUpdate(newItem, "approved"));
+  };
+
   useEffect(() => {
     getApiSection();
     getApi();
@@ -200,7 +221,7 @@ export default function ManagementProposedProjects() {
       if (items[0])
         return dataProc.map((g) => {
           return (
-            <div style={{ display: "flex" }}>
+            <div key={g.groupNo} style={{ display: "flex" }}>
               <div style={{ width: "3%", backgroundColor: getRandomColor() }}>
                 <p className="textV">Grupo {g.groupNo}</p>
               </div>
@@ -282,6 +303,34 @@ export default function ManagementProposedProjects() {
                               >
                                 {item && (
                                   <div>
+                                    {item.state !== "approved" && (
+                                      <Button
+                                        size="small"
+                                        style={{
+                                          width: 73,
+                                          height: 20,
+                                          marginRight: 5,
+                                        }}
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() =>
+                                          handleStateProjectApproved(
+                                            item,
+                                            g.groupNo
+                                          )
+                                        }
+                                      >
+                                        Aprobar
+                                      </Button>
+                                    )}
+                                  </div>
+                                )}
+                                <Divider
+                                  style={{ width: 2, height: 13, margin: 4 }}
+                                  orientation="vertical"
+                                />
+                                {item && (
+                                  <div>
                                     {item.state !== "denied" && (
                                       <Button
                                         size="small"
@@ -317,27 +366,6 @@ export default function ManagementProposedProjects() {
                                         }
                                       >
                                         Guardar
-                                      </Button>
-                                    )}
-                                  </div>
-                                )}
-                                {item && (
-                                  <div>
-                                    {item.state !== "approved" && (
-                                      <Button
-                                        size="small"
-                                        style={{
-                                          width: 73,
-                                          height: 20,
-                                          marginRight: 5,
-                                        }}
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() =>
-                                          handleStateProject("approved", item)
-                                        }
-                                      >
-                                        Aprobar
                                       </Button>
                                     )}
                                   </div>
@@ -478,207 +506,3 @@ export default function ManagementProposedProjects() {
     </Container>
   );
 }
-/*const ShowData = () => {
-    if (!dataEmpty)
-      if (items[0])
-        return items.map((item) => {
-          return (
-            <div key={item.proposedProjectsId}>
-              <Accordion
-                expanded={expanded === "panel1" + item.proposedProjectsId}
-                onChange={handleChange("panel1" + item.proposedProjectsId)}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls={"panel1bh-content"}
-                  id={"panel1bh-header"}
-                >
-                  <Box
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      width: "100%",
-                    }}
-                  >
-                    <Box
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        width: "100%",
-                      }}
-                    >
-                      <Typography>
-                        Estudiante:{" "}
-                        <Typography
-                          component="span"
-                          style={{ fontWeight: "bold" }}
-                        >
-                          {item.studenName}
-                        </Typography>
-                      </Typography>
-                      <Typography>
-                        Matricula:{" "}
-                        <Typography
-                          component="span"
-                          style={{ fontWeight: "bold" }}
-                        >
-                          {item.enrollment}
-                        </Typography>
-                      </Typography>
-                      <Typography>
-                        Proyecto:{" "}
-                        <Typography
-                          component="span"
-                          style={{ fontWeight: "bold" }}
-                        >
-                          {item.name}
-                        </Typography>
-                      </Typography>
-                    </Box>
-                    <Box
-                      onClick={(event) => event.stopPropagation()}
-                      onFocus={(event) => event.stopPropagation()}
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Box></Box>
-                      <Box
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-
-                          marginTop: "13px",
-                        }}
-                      >
-                        {item && (
-                          <div>
-                            {item.state !== "denied" && (
-                              <Button
-                                size="small"
-                                style={{
-                                  width: 60,
-                                  height: 20,
-                                  marginRight: 4,
-                                }}
-                                variant="contained"
-                                color="secondary"
-                                onClick={() =>
-                                  handleStateProject("denied", item)
-                                }
-                              >
-                                Negar
-                              </Button>
-                            )}
-                          </div>
-                        )}
-                        {item && (
-                          <div>
-                            {item.state !== "potential" && (
-                              <Button
-                                size="small"
-                                variant="contained"
-                                style={{
-                                  width: 73,
-                                  height: 20,
-                                  marginRight: 4,
-                                }}
-                                onClick={() =>
-                                  handleStateProject("potential", item)
-                                }
-                              >
-                                Guardar
-                              </Button>
-                            )}
-                          </div>
-                        )}
-                        {item && (
-                          <div>
-                            {item.state !== "approved" && (
-                              <Button
-                                size="small"
-                                style={{
-                                  width: 73,
-                                  height: 20,
-                                  marginRight: 5,
-                                }}
-                                variant="contained"
-                                color="primary"
-                                onClick={() =>
-                                  handleStateProject("approved", item)
-                                }
-                              >
-                                Aprobar
-                              </Button>
-                            )}
-                          </div>
-                        )}
-                      </Box>
-                    </Box>
-                  </Box>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Box className={classes.rootCard}>
-                    <Box>
-                      <Box style={{ display: "flex" }}>
-                        <Box style={{ width: "325px" }}>
-                          <Typography>Descripción</Typography>
-                          <Typography
-                            className="lizardsStyle"
-                            style={{
-                              overflowY: "scroll",
-
-                              height: 100,
-                            }}
-                            variant="body2"
-                            color="textSecondary"
-                            component="p"
-                          >
-                            {item.description}
-                          </Typography>
-                        </Box>
-                        <Box style={{ marginLeft: 20, width: "325px" }}>
-                          <Typography>Justificación</Typography>
-                          <Typography
-                            className="lizardsStyle"
-                            style={{
-                              overflowY: "scroll",
-
-                              height: 100,
-                            }}
-                            variant="body2"
-                            color="textSecondary"
-                            component="p"
-                          >
-                            {item.justification}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
-            </div>
-          );
-        });
-      else
-        return (
-          <Container
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              width: 700,
-              padding: 0,
-            }}
-          >
-            <CircularProgress />
-          </Container>
-        );
-    if (dataEmpty)
-      return (
-        <Typography style={{ textAlign: "center", fontSize: 20 }}>
-          No hay datos para mostrar.
-        </Typography>
-      );
-  };*/
