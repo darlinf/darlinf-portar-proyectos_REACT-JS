@@ -94,6 +94,20 @@ const ProposedProjectsShowStudent = () => {
                     }}
                   >
                     <Typography>
+                      Estudiante:{" "}
+                      <Typography
+                        component="span"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {item.studentId === student.studentId && (
+                          <span>Yo</span>
+                        )}
+                        {item.studentId !== student.studentId && (
+                          <span>{item.studentName}</span>
+                        )}
+                      </Typography>
+                    </Typography>
+                    <Typography>
                       Estado:{" "}
                       <Typography
                         component="span"

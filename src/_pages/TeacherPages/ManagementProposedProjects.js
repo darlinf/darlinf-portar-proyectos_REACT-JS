@@ -101,17 +101,6 @@ export default function ManagementProposedProjects() {
     item.state = state;
     var itemUpdate = setItemToUpdate(item, state);
     console.log(state);
-    if (state === "approved") {
-      console.log(state);
-      teacherService
-        .updateUserForFinalProject(item.studentId, item.name)
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
     updateApi(itemUpdate);
   };
 
@@ -166,7 +155,7 @@ export default function ManagementProposedProjects() {
   };
 
   const searchTo = (value) => {
-    setItems(
+    processingData(
       itemsCopy.filter(
         (el) => el.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
       )
@@ -199,9 +188,22 @@ export default function ManagementProposedProjects() {
     if (oldItem) {
       oldItem.state = "evaluate";
       updateApi(setItemToUpdate(oldItem, "evaluate"));
+      updateHomeState(oldItem.studentId, null);
     }
     newItem.state = "approved";
     updateApi(setItemToUpdate(newItem, "approved"));
+    updateHomeState(newItem.studentId, newItem.name);
+  };
+
+  const updateHomeState = (studentId, homeState) => {
+    teacherService
+      .updateUserForFinalProject(studentId, homeState)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   useEffect(() => {
@@ -222,10 +224,18 @@ export default function ManagementProposedProjects() {
         return dataProc.map((g) => {
           return (
             <div key={g.groupNo} style={{ display: "flex" }}>
-              <div style={{ width: "3%", backgroundColor: getRandomColor() }}>
+              <div
+                style={{
+                  width: "3%",
+                  marginBottom: 10,
+                  marginTop: 7,
+                  backgroundColor: getRandomColor(),
+                  borderRadius: "5px 0 0 5px",
+                }}
+              >
                 <p className="textV">Grupo {g.groupNo}</p>
               </div>
-              <div style={{ width: "97%" }}>
+              <div style={{ marginBottom: 5, width: "97%" }}>
                 {g.group.map((item) => {
                   return (
                     <div key={item.proposedProjectsId}>
@@ -384,7 +394,6 @@ export default function ManagementProposedProjects() {
                                     className="lizardsStyle"
                                     style={{
                                       overflowY: "scroll",
-
                                       height: 100,
                                     }}
                                     variant="body2"
