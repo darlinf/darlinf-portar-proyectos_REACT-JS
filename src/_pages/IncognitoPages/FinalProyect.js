@@ -16,10 +16,27 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 
+import Dialog from "@material-ui/core/Dialog";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItem from "@material-ui/core/ListItem";
+import List from "@material-ui/core/List";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Slide from "@material-ui/core/Slide";
+
 import "./style/styleFinalProyect.css";
 import { incognitoService } from "../../_services/incognito.service";
 
 const useStyles = makeStyles((theme) => ({
+  appBar: {
+    position: "relative",
+  },
+  title: {
+    marginLeft: theme.spacing(2),
+    flex: 1,
+  },
   root: {
     display: "flex",
     alignItems: "center",
@@ -64,6 +81,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const FinalProyect = () => {
   const classes = useStyles();
   const [items, setItems] = useState([]);
@@ -105,6 +126,17 @@ const FinalProyect = () => {
     );
   };
 
+  const [open, setOpen] = React.useState(false);
+  const [finalDocumentationSRC, setFinalDocumentationSRC] = React.useState("");
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const ShowData = () => {
     if (items[0])
       return items.map((item) => {
@@ -136,14 +168,16 @@ const FinalProyect = () => {
               }}
             >
               <Typography>Calificación {item.examGrade}</Typography>
-              <a
-                target="blank"
-                href={"https://localhost:5001/" + item.finalDocumentationSRC}
+              <Button
+                onClick={() => {
+                  handleClickOpen();
+                  setFinalDocumentationSRC(item.finalDocumentationSRC);
+                }}
+                size="small"
+                color="primary"
               >
-                <Button size="small" color="primary">
-                  Ver documentación
-                </Button>
-              </a>
+                Ver documentación
+              </Button>
             </CardActions>
           </Card>
         );
@@ -205,6 +239,39 @@ const FinalProyect = () => {
       >
         <ShowData></ShowData>
       </Container>
+      <div>
+        <Dialog
+          fullScreen
+          open={open}
+          onClose={handleClose}
+          TransitionComponent={Transition}
+        >
+          <AppBar
+            style={{ backgroundColor: "#1976D2" }}
+            className={classes.appBar}
+          >
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={handleClose}
+                aria-label="close"
+              >
+                <CloseIcon />
+              </IconButton>
+              <Typography variant="h6" className={classes.title}>
+                Documentación
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <embed
+            style={{ width: "100%" }}
+            src={"https://localhost:5001/" + finalDocumentationSRC}
+            width="800px"
+            height="2100px"
+          />
+        </Dialog>
+      </div>
     </Container>
   );
 };

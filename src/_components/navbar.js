@@ -164,15 +164,17 @@ export default function Navbar(props) {
                         Final
                       </Link>
                     )}
-                  </Button>
-                  <Button>
-                    <Link
-                      to="/proposedProjectsStudent"
-                      style={{ color: "white", textDecoration: "none" }}
-                    >
-                      Crear propuesto
-                    </Link>
-                  </Button>
+                  </Button>{" "}
+                  {proposedProject === null && (
+                    <Button>
+                      <Link
+                        to="/proposedProjectsStudent"
+                        style={{ color: "white", textDecoration: "none" }}
+                      >
+                        Crear propuesto
+                      </Link>
+                    </Button>
+                  )}
                   <Button>
                     <Link
                       to="/ProposedProjectsShowStudent"

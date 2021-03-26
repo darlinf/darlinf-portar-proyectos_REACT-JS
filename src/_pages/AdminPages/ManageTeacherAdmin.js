@@ -11,6 +11,11 @@ import InputBase from "@material-ui/core/InputBase";
 import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
 import { adminService } from "../../_services/admin.service";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,15 +53,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ManageTeacherAdmin() {
+export default function ManageTeacherAdmin(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [items, setItems] = useState([]);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [idToDelete, setIdToDelete] = useState(0);
+  const [itemsCopy, setItemsCopy] = useState([]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-  const [age, setAge] = React.useState("");
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    props.history.push({ pathname: "/manageTeacherAdmin" });
+    setOpenDialog(false);
+  };
 
   const getApi = () => {
     adminService
@@ -64,6 +80,7 @@ export default function ManageTeacherAdmin() {
       .then((data) => {
         console.log(data);
         setItems(data);
+        setItemsCopy(data);
       })
       .catch((error) => {
         console.error(error);
@@ -74,6 +91,26 @@ export default function ManageTeacherAdmin() {
     getApi();
   }, []);
 
+  const confirmDelete = () => {
+    console.log(idToDelete);
+    adminService
+      .deleteTeacher(idToDelete)
+      .then((data) => {
+        getApi();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const searchTo = (value) => {
+    setItems(
+      itemsCopy.filter(
+        (el) => el.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
+      )
+    );
+  };
+
   return (
     <Container style={{ width: 750, marginTop: 50 }}>
       <Typography
@@ -82,11 +119,12 @@ export default function ManageTeacherAdmin() {
         Gestionar maestros
       </Typography>
       <Paper component="form" className={classes.root2}>
-        <Divider className={classes.divider} orientation="vertical" />
         <InputBase
+          style={{ marginLeft: 10, width: "100%" }}
           className={classes.input}
           placeholder="Buscar maestro"
           inputProps={{ "aria-label": "search google maps" }}
+          onChange={(e) => searchTo(e.target.value)}
         />
       </Paper>
       <div className={classes.root}>
@@ -135,19 +173,23 @@ export default function ManageTeacherAdmin() {
                     >
                       <Button
                         size="small"
-                        style={{ width: 80, height: 20 }}
                         variant="contained"
-                        color="secondary"
+                        color="primary"
+                        style={{ width: 80, height: 20, opacity: 0 }}
                       >
-                        Eliminar
+                        Editar
                       </Button>
                       <Button
                         size="small"
-                        variant="contained"
-                        color="primary"
                         style={{ width: 80, height: 20 }}
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => {
+                          handleClickOpenDialog();
+                          setIdToDelete(x.id);
+                        }}
                       >
-                        Editar
+                        Eliminar
                       </Button>
                     </Box>
                   </Box>
@@ -155,6 +197,38 @@ export default function ManageTeacherAdmin() {
               </Accordion>
             );
           })}
+      </div>
+      <div>
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Eliminar elemento"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Estas seguro que deseas eliminar este elemento permanentemente.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                handleCloseDialog();
+                confirmDelete();
+              }}
+              color="primary"
+              autoFocus
+            >
+              Aceptar
+            </Button>
+            <Button onClick={handleCloseDialog} color="primary" autoFocus>
+              Cancelar
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </Container>
   );

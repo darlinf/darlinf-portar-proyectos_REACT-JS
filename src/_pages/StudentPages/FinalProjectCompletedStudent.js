@@ -8,9 +8,42 @@ import Typography from "@material-ui/core/Typography";
 import { Container } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { CardMedia } from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Slide from "@material-ui/core/Slide";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  appBar: {
+    position: "relative",
+  },
+  title: {
+    marginLeft: theme.spacing(2),
+    flex: 1,
+  },
+}));
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function FinalProjectCompletedStudent() {
   const [item, setItem] = useState({});
+
+  const classes = useStyles();
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const student = authenticationService.currentUserValue();
   useEffect(() => {
@@ -91,17 +124,46 @@ export default function FinalProjectCompletedStudent() {
             {item.examGrade !== null && (
               <Typography>Calificación {item.examGrade}</Typography>
             )}
-            <a
-              target="blank"
-              href={"https://localhost:5001/" + item.finalDocumentationSRC}
-            >
-              <Button size="small" color="primary">
-                Ver documentación
-              </Button>
-            </a>
+            <Button onClick={handleClickOpen} size="small" color="primary">
+              Ver documentación
+            </Button>
           </CardActions>
         </Card>
       </Container>
+
+      <div>
+        <Dialog
+          fullScreen
+          open={open}
+          onClose={handleClose}
+          TransitionComponent={Transition}
+        >
+          <AppBar
+            style={{ backgroundColor: "#1976D2" }}
+            className={classes.appBar}
+          >
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={handleClose}
+                aria-label="close"
+              >
+                <CloseIcon />
+              </IconButton>
+              <Typography variant="h6" className={classes.title}>
+                Documentación
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <embed
+            style={{ width: "100%" }}
+            src={"https://localhost:5001/" + item.finalDocumentationSRC}
+            width="800px"
+            height="2100px"
+          />
+        </Dialog>
+      </div>
     </div>
   );
 }

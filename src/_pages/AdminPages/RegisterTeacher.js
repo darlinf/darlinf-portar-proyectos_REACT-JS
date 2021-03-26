@@ -13,10 +13,11 @@ import Paper from "@material-ui/core/Paper";
 import TagFacesIcon from "@material-ui/icons/TagFaces";
 import Box from "@material-ui/core/Box";
 import AddToPhotosIcon from "@material-ui/icons/AddToPhotos";
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 function InputCustoms({ errors, touched, name, keyObj, type = "text" }) {
   return (
@@ -49,21 +50,19 @@ function InputCustoms({ errors, touched, name, keyObj, type = "text" }) {
 
 export default function RegisterTeacher(props) {
   const classes = styles();
-  const [open, setOpen] = React.useState(false);
   const [section, setSection] = React.useState("");
-
-  const handleClick = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen(false);
-  };
+  const [openDialog, setOpenDialog] = React.useState(false);
 
   const [chipData, setChipData] = React.useState([]);
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    props.history.push({ pathname: "/manageTeacherAdmin" });
+    setOpenDialog(false);
+  };
 
   const handleAddSection = () => {
     setChipData([
@@ -79,7 +78,7 @@ export default function RegisterTeacher(props) {
   };
 
   return (
-    <Container style={{ width: 400 }}>
+    <Container style={{ width: 400, marginTop: 20 }}>
       <Card variant="outlined" style={{ padding: 30 }}>
         <div>
           <Typography
@@ -122,16 +121,12 @@ export default function RegisterTeacher(props) {
               setStatus();
               adminService.registerTeacher(teacher).then(
                 (response) => {
-                  /*const { from } = props.location.state || {
-                    from: { pathname: "/registerSuccess" },
-                  };
-                  props.history.push(from);*/
                   console.log(response);
+                  handleClickOpenDialog();
                 },
                 (error) => {
                   setSubmitting(false);
                   setStatus(error);
-                  handleClick();
                 }
               );
             }}
@@ -246,23 +241,33 @@ export default function RegisterTeacher(props) {
                     </button>
                   </div>
                 </Container>
-
-                {status && (
-                  <Snackbar
-                    open={open}
-                    autoHideDuration={2000}
-                    onClose={handleClose}
-                  >
-                    <Alert onClose={handleClose} severity="error">
-                      {status}
-                    </Alert>
-                  </Snackbar>
-                )}
               </Form>
             )}
           />
         </div>
       </Card>
+      <div>
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"¡Registro éxito!"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Solicitud de registro hecha exitosamente.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary" autoFocus>
+              Aceptar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </Container>
   );
 }

@@ -341,43 +341,48 @@ export default function ManagementProposedProjects() {
                                 />
                                 {item && (
                                   <div>
-                                    {item.state !== "denied" && (
-                                      <Button
-                                        size="small"
-                                        style={{
-                                          width: 60,
-                                          height: 20,
-                                          marginRight: 4,
-                                        }}
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick={() =>
-                                          handleStateProject("denied", item)
-                                        }
-                                      >
-                                        Negar
-                                      </Button>
-                                    )}
+                                    {item.state !== "denied" &&
+                                      item.state !== "approved" && (
+                                        <Button
+                                          size="small"
+                                          style={{
+                                            width: 60,
+                                            height: 20,
+                                            marginRight: 4,
+                                          }}
+                                          variant="contained"
+                                          color="secondary"
+                                          onClick={() =>
+                                            handleStateProject("denied", item)
+                                          }
+                                        >
+                                          Negar
+                                        </Button>
+                                      )}
                                   </div>
                                 )}
                                 {item && (
                                   <div>
-                                    {item.state !== "potential" && (
-                                      <Button
-                                        size="small"
-                                        variant="contained"
-                                        style={{
-                                          width: 73,
-                                          height: 20,
-                                          marginRight: 4,
-                                        }}
-                                        onClick={() =>
-                                          handleStateProject("potential", item)
-                                        }
-                                      >
-                                        Guardar
-                                      </Button>
-                                    )}
+                                    {item.state !== "potential" &&
+                                      item.state !== "approved" && (
+                                        <Button
+                                          size="small"
+                                          variant="contained"
+                                          style={{
+                                            width: 73,
+                                            height: 20,
+                                            marginRight: 4,
+                                          }}
+                                          onClick={() =>
+                                            handleStateProject(
+                                              "potential",
+                                              item
+                                            )
+                                          }
+                                        >
+                                          Guardar
+                                        </Button>
+                                      )}
                                   </div>
                                 )}
                               </div>
