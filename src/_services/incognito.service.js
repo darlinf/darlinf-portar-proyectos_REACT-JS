@@ -1,5 +1,5 @@
 import axios from "axios";
-const apiUrl = "https://localhost:5001/api/";
+const apiUrl = "http://darlinf-001-site1.dtempurl.com/api/";
 
 export const incognitoService = {
   getAllProposedProject,

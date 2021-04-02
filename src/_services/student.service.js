@@ -1,6 +1,6 @@
 import axios from "axios";
 import { authHeader } from "../_helpers";
-const apiUrl = "https://localhost:5001/api/";
+const apiUrl = "http://darlinf-001-site1.dtempurl.com/api/";
 
 export const studentService = {
   CreateProposedProject,

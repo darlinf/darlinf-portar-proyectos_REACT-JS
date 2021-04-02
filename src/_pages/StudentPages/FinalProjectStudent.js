@@ -16,6 +16,7 @@ import { authenticationService } from "../../_services/authentication.service";
 import { studentService } from "../../_services/student.service";
 import { teacherService } from "../../_services/teacher.service";
 
+const apiUrl = "http://darlinf-001-site1.dtempurl.com/api/";
 const axios = require("axios");
 
 const useStyles = makeStyles((theme) => ({
@@ -68,7 +69,7 @@ export default function FinalProjectStudent(props) {
       },
     };
     axios
-      .post("https://localhost:5001/api/Upload/upload", formData, config)
+      .post(apiUrl + "Upload/upload", formData, config)
       .then((response) => {
         console.log(response);
         imgUrl = response.data;
@@ -90,7 +91,7 @@ export default function FinalProjectStudent(props) {
       },
     };
     axios
-      .post("https://localhost:5001/api/Upload/upload", formData, config)
+      .post(apiUrl + "Upload/upload", formData, config)
       .then((response) => {
         console.log(response);
         pdfUrl = response.data;

@@ -28,6 +28,7 @@ import Slide from "@material-ui/core/Slide";
 
 import "./style/styleFinalProyect.css";
 import { incognitoService } from "../../_services/incognito.service";
+const apiUrl = "http://darlinf-001-site1.dtempurl.com/";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -144,7 +145,7 @@ const FinalProyect = () => {
           <Card className={classes.rootCard2}>
             <CardMedia
               className={classes.media2}
-              image={"https://localhost:5001/" + item.imageSRC}
+              image={apiUrl + item.imageSRC}
               title="Contemplative Reptile"
             />
             <CardContent>
@@ -266,7 +267,7 @@ const FinalProyect = () => {
           </AppBar>
           <embed
             style={{ width: "100%" }}
-            src={"https://localhost:5001/" + finalDocumentationSRC}
+            src={apiUrl + finalDocumentationSRC}
             width="800px"
             height="2100px"
           />

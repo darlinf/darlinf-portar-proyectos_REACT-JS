@@ -16,6 +16,8 @@ import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
 
+const apiUrl = "http://darlinf-001-site1.dtempurl.com/";
+
 const useStyles = makeStyles((theme) => ({
   appBar: {
     position: "relative",
@@ -98,7 +100,7 @@ export default function FinalProjectCompletedStudent() {
         <Card>
           <CardMedia
             style={{ height: 160 }}
-            image={"https://localhost:5001/" + item.imageSRC}
+            image={apiUrl + item.imageSRC}
             title="Contemplative Reptile"
           />
           <CardContent>
@@ -158,7 +160,7 @@ export default function FinalProjectCompletedStudent() {
           </AppBar>
           <embed
             style={{ width: "100%" }}
-            src={"https://localhost:5001/" + item.finalDocumentationSRC}
+            src={apiUrl + item.finalDocumentationSRC}
             width="800px"
             height="2100px"
           />

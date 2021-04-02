@@ -1,7 +1,7 @@
 import { BehaviorSubject } from "rxjs";
 import { handleResponse } from "../_helpers/handle-response";
 
-const apiUrl = "https://localhost:5001/api/";
+const apiUrl = "http://darlinf-001-site1.dtempurl.com/api/";
 
 const currentUserSubject = new BehaviorSubject(
   JSON.parse(localStorage.getItem("currentUser"))
