@@ -89,7 +89,7 @@ export default function RegisterTeacher(props) {
               marginBottom: "10px",
             }}
           >
-            Registrarse
+            Crear docente
           </Typography>
           <Formik
             initialValues={{
@@ -237,7 +237,7 @@ export default function RegisterTeacher(props) {
                       className="btn btn-primary"
                       disabled={isSubmitting}
                     >
-                      Hacer solicitud
+                      Crear
                     </button>
                   </div>
                 </Container>
@@ -258,7 +258,7 @@ export default function RegisterTeacher(props) {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Solicitud de registro hecha exitosamente.
+              Docente registrado exitosamente.
             </DialogContentText>
           </DialogContent>
           <DialogActions>

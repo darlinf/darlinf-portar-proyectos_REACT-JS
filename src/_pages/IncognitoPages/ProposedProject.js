@@ -61,6 +61,7 @@ const ProposedProject = () => {
   const [age, setAge] = React.useState("");
   const [items, setItems] = useState([]);
   const [itemsCopy, setItemsCopy] = useState([]);
+  const [dataEmpty, setDataEmpty] = useState(false);
 
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -72,6 +73,8 @@ const ProposedProject = () => {
         console.log(data);
         setItems(data);
         setItemsCopy(data);
+        if (data[0]) setDataEmpty(false);
+        if (!data[0]) setDataEmpty(true);
       })
       .catch((error) => {
         console.error(error);
@@ -84,6 +87,8 @@ const ProposedProject = () => {
       .then((data) => {
         setItems(data);
         setItemsCopy(data);
+        if (data[0]) setDataEmpty(false);
+        if (!data[0]) setDataEmpty(true);
       })
       .catch((error) => {
         console.error(error);
@@ -96,64 +101,79 @@ const ProposedProject = () => {
         (el) => el.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
       )
     );
+    /* if (!items.length === 0) {
+      setDataEmpty(false);
+      console.log(dataEmpty);
+    }
+    if (items.length === 0) {
+      setDataEmpty(true);
+      console.log(dataEmpty);
+    }*/
   };
 
   const ShowData = () => {
-    if (items[0])
-      return items.map((item) => {
+    if (!dataEmpty)
+      if (items[0])
+        return items.map((item) => {
+          return (
+            <Card key={item.id}>
+              <CardContent>
+                <Typography
+                  style={{ textAlign: "center" }}
+                  gutterBottom
+                  variant="h5"
+                  component="h2"
+                >
+                  {item.name}
+                </Typography>
+                <Box style={{ display: "flex" }}>
+                  <Box style={{ width: "50%" }}>
+                    <Typography>Descripción</Typography>
+                    <Typography
+                      className="lizardsStyle"
+                      style={{ overflowY: "scroll", height: 100 }}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      {item.description}
+                    </Typography>
+                  </Box>
+                  <Box style={{ marginLeft: 20, width: "50%" }}>
+                    <Typography>Justificación</Typography>
+                    <Typography
+                      className="lizardsStyle"
+                      style={{ overflowY: "scroll", height: 100 }}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      {item.justification}
+                    </Typography>
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          );
+        });
+      else
         return (
-          <Card key={item.id}>
-            <CardContent>
-              <Typography
-                style={{ textAlign: "center" }}
-                gutterBottom
-                variant="h5"
-                component="h2"
-              >
-                {item.name}
-              </Typography>
-              <Box style={{ display: "flex" }}>
-                <Box style={{ width: "50%" }}>
-                  <Typography>Descripción</Typography>
-                  <Typography
-                    className="lizardsStyle"
-                    style={{ overflowY: "scroll", height: 100 }}
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {item.description}
-                  </Typography>
-                </Box>
-                <Box style={{ marginLeft: 20, width: "50%" }}>
-                  <Typography>Justificación</Typography>
-                  <Typography
-                    className="lizardsStyle"
-                    style={{ overflowY: "scroll", height: 100 }}
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {item.justification}
-                  </Typography>
-                </Box>
-              </Box>
-            </CardContent>
-          </Card>
+          <Container
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: 940,
+              padding: 0,
+            }}
+          >
+            <CircularProgress />
+          </Container>
         );
-      });
-    else
+    if (dataEmpty)
       return (
-        <Container
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            width: 940,
-            padding: 0,
-          }}
-        >
-          <CircularProgress />
-        </Container>
+        <Typography style={{ textAlign: "center", fontSize: 20, width: 940 }}>
+          No hay datos para mostrar.
+        </Typography>
       );
   };
 
@@ -174,9 +194,16 @@ const ProposedProject = () => {
             onChange={handleChange}
             style={{ border: "none", width: 200 }}
           >
-            <MenuItem value={"gastronomia"}>gastronomia</MenuItem>
-            <MenuItem value={"software"}>software</MenuItem>
-            <MenuItem value={"software2"}>software2</MenuItem>
+            <MenuItem value={"gastronomia"}>Gastronomía</MenuItem>
+            <MenuItem value={"software"}>Desarrollo de Software</MenuItem>
+            <MenuItem value={"modas"}>Diseño de Modas</MenuItem>
+            <MenuItem value={"Redes"}>Administración de Redes</MenuItem>
+            <MenuItem value={"logistica"}>
+              Técnico Superior en Logística
+            </MenuItem>
+            <MenuItem value={"eventos"}>Producción de Eventos</MenuItem>
+            <MenuItem value={"grafico"}>Diseño Gráfico</MenuItem>
+            <MenuItem value={"interiores"}>Diseño de Interiores</MenuItem>
           </Select>
         </FormControl>
 

@@ -24,6 +24,8 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import { teacherService } from "../../_services/teacher.service";
 import { authenticationService } from "../../_services/authentication.service";
 
+const apiUrl = "http://darlinf-001-site1.dtempurl.com/";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -342,7 +344,7 @@ export default function ManageFinalProjectsTeacher() {
                   >
                     <CardMedia
                       style={{ height: 170, width: "40%" }}
-                      image={"https://localhost:5001/" + item.imageSRC}
+                      image={apiUrl + item.imageSRC}
                       title="Contemplative Reptile"
                     />
                     <CardContent style={{ height: 170, width: "60%" }}>
